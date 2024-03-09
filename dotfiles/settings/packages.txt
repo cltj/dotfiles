@@ -1,0 +1,13 @@
+unzip
+zsh
+gh
+git
+python3-pip
+gnupg
+pipx
+ca-certificates
+apt-transport-https
+curl
+lsb-release
+fontconfig
+npm
