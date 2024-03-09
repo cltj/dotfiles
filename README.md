@@ -18,9 +18,7 @@ chmod +x setup.sh
 sudo ./setup.sh
 ```
 
-
-![Figure](https://github.com/fktj/dotfiles/blob/be691c4fa8a0108d875ffc71e1a09d0ddf92a619/explanation.png)
-
+![explanation.png](https://github.com/cltj/dotfiles/blob/6f9f72f212410e199d216cc9afa6beb49f1840a0/explanation.png)
 
 
 ⚠️ Warning, this will irrevocably replace your config with mine, and install a bunch of stuff on your system.
