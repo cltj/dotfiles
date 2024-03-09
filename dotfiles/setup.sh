@@ -80,13 +80,13 @@ done
 configure_git_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-git.sh"
 configure_git_script="./configure-git.sh"
 
-if curl -s -o "$configure_git_script" "$configure_git_script_url" "$user_home"; then
+if curl -s -o "$configure_git_script" "$configure_git_script_url"; then
     # Only try to set permissions and run the script if the download succeeded
     chmod +x "$configure_git_script"
 
     if [ -x "$configure_git_script" ]; then
         # Only run the child script if it is executable
-        (./configure-git.sh "$user_email" "$user_name") || echo "configure-git.sh script failed"
+        (./configure-git.sh "$user_email" "$user_name" "$user_home") || echo "configure-git.sh script failed"
     else
         echo "Failed to set execute permissions on configure-git.sh"
         echo "Please run the script manually"
