@@ -1,0 +1,101 @@
+add_newline = true
+
+# Order of modules on prompt
+format = """\
+        $time\
+        $username\
+        $hostname\
+        $directory\
+        $docker_context\
+        $git_branch\
+        $git_commit\
+        $git_status\
+        $git_state\
+        $python\
+        $package\
+        $conda\
+        $line_break\
+        $battery\
+        $shlvl\
+        $jobs\
+        $status\
+        $character\
+    """
+
+[character]
+format = "$symbol "
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vicmd_symbol = "[❮](bold green)"
+
+[line_break]
+disabled = false
+
+[directory]
+style = "bold 33"
+truncation_length = 0
+truncate_to_repo = false
+
+[docker_context]
+
+[git_branch]
+symbol = ""
+
+[git_commit]
+style = "fg:#707070"
+commit_hash_length = 8
+only_detached = false
+
+[git_state]
+rebase = "rebasing"
+merge = "merging"
+revert = "reverting"
+cherry_pick = "🍒 picking"
+bisect = "bisecting"
+am = "am'ing"
+am_or_rebase = "am'ing/rebasing"
+
+[git_status]
+
+[git_metrics]
+disabled = false
+
+[hostname]
+ssh_only = true
+trim_at = "."
+
+[jobs]
+disabled = true
+symbol = "J"
+threshold = 1
+style = "bold blue"
+format = "[$symbol$number]($style) "
+
+[package]  # Currently supports npm, cargo, poetry, composer, gradle, julia and mix
+style = "bold fg:94"
+symbol = ""
+display_private = true
+
+[python]
+symbol = ""
+style = "bold 64"
+pyenv_prefix = "pyenv "
+python_binary = "python3"
+
+[shlvl]
+
+[status]
+disabled = false
+symbol = "X"
+
+[time]
+disabled = true
+time_format = "%H:%M"
+time_range = "20:00:00-06:00:00"
+style = "bold purple"
+format = '[\[$time\]]($style) '
+
+[username]
+style_root = "bold red"
+style_user = "bold yellow"
+show_always = false

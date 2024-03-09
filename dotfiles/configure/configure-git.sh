@@ -3,6 +3,7 @@
 # Assign passed arguments to variables
 user_email="$1"
 user_name="$2"
+user_home="$3"
 
 # Check if git-credential-manager is installed
 if ! command -v git-credential-manager &> /dev/null; then
@@ -40,7 +41,7 @@ else
     # git config --global credential.credentialStore "gpg"
     fi
 
-    if [ -f "$HOME/.gitconfig" ]; then
+    if [ -f "$user_home/.gitconfig" ]; then
         echo "Git global configuration has been updated."
     fi
 fi

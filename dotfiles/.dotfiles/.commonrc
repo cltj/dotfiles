@@ -3,7 +3,7 @@ export MCFLY_RESULTS=50
 export MCFLY_FUZZY=true
 
 # Meta
-alias updot="source <(curl -fsSL https://raw.githubusercontent.com/fktj/dotfiles/main/install.sh)"
+alias updot="source <(curl -fsSL https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-dotfiles.sh)"
 
 # cd
 alias cd..='cd ..'

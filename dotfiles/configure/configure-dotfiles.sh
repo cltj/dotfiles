@@ -20,10 +20,10 @@ curl -sS https://webinstall.dev/zoxide | bash
 
 # Ensure dotfiles are downloaded.
 mkdir -v -p ~/.dotfiles
-wget -O ~/.dotfiles/starship.toml "https://raw.githubusercontent.com/fktj/dotfiles/main/.dotfiles/starship.toml"
-wget -O ~/.dotfiles/.commonrc "https://raw.githubusercontent.com/fktj/dotfiles/main/.dotfiles/.commonrc"
-wget -O ~/.dotfiles/.zshrc "https://raw.githubusercontent.com/fktj/dotfiles/main/.dotfiles/.zshrc"
-wget -O ~/.dotfiles/.bashrc "https://raw.githubusercontent.com/fktj/dotfiles/main/.dotfiles/.bashrc"
+wget -O ~/.dotfiles/starship.toml "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/starship.toml"
+wget -O ~/.dotfiles/.commonrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.commonrc"
+wget -O ~/.dotfiles/.zshrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.zshrc"
+wget -O ~/.dotfiles/.bashrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.bashrc"
 
 
 echo "Creating zsh symlinks..."

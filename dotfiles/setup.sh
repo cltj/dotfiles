@@ -29,7 +29,7 @@ install_package() {
     fi
 }
 
-curl -s https://raw.githubusercontent.com/cltj/dotfiles/main/settings/packages.txt | while read package; do
+curl -s https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/settings/packages.txt | while read package; do
     install_package "$package"
 done
 
@@ -77,10 +77,10 @@ done
 ########################################
 # Download the configure-git.sh script #
 ########################################
-configure_git_script_url="https://raw.githubusercontent.com/cltj/dotfiles/main/configure/configure-git.sh"
+configure_git_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-git.sh"
 configure_git_script="./configure-git.sh"
 
-if curl -s -o "$configure_git_script" "$configure_git_script_url"; then
+if curl -s -o "$configure_git_script" "$configure_git_script_url" "$user_home"; then
     # Only try to set permissions and run the script if the download succeeded
     chmod +x "$configure_git_script"
 
@@ -98,7 +98,7 @@ fi
 #############################################
 # Download the configure-dotfiles.sh script #
 #############################################
-configure_dotfiles_script_url="https://raw.githubusercontent.com/cltj/dotfiles/main/configure/configure-dotfiles.sh"
+configure_dotfiles_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-dotfiles.sh"
 configure_dotfiles_script="./configure-dotfiles.sh"
 
 if curl -s -o "$configure_dotfiles_script" "$configure_dotfiles_script_url"; then
