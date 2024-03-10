@@ -9,12 +9,10 @@ echo "Run as: $user_email , $user_name , $user_home" >> setuplog.txt
 if ! command -v git-credential-manager &> /dev/null; then
     echo "git-credential-manager is required but not installed. Please install it first." >> setuplog.txt
 else
-    # Prompt the user for their Azure DevOps PAT
-    echo "Please enter your Azure DevOps PAT:"
-
     # Disable echo
     stty -echo
-    read -p azure_pat
+    # Prompt the user for their Azure DevOps PAT
+    read -p "Please enter your Azure DevOps PAT: " azure_pat
     # Enable echo
     stty echo
     echo
