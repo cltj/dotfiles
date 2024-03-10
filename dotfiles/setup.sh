@@ -57,7 +57,7 @@ do
                     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
                     chsh -s /bin/zsh $user_name
                     sudo apt install fzf -y && sudo apt install zsh-autosuggestions -y
-                    echo "$(date) - $command installed." >> setuplog.txt
+                    echo "$(date) - $command installed." | tee -a setuplog.txt
                 fi
                 ;;
             "databricks")
@@ -70,7 +70,7 @@ do
                 echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
                 sudo apt update
                 sudo apt install azure-cli -y
-                echo "$(date) - $command installed." >> setuplog.txt
+                echo "$(date) - $command installed." | tee -a setuplog.txt
                 ;;
             "git-credential-manager")
                 wget "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.4.1/gcm-linux_amd64.2.4.1.deb" -O /tmp/gcmcore.deb && sudo dpkg -i /tmp/gcmcore.deb
@@ -81,11 +81,11 @@ do
                 sudo POETRY_HOME="$user_home/.poetry/bin" python3 - < <(curl -sSL https://install.python-poetry.org)
                 export PATH="$user_home/.poetry/bin:$PATH"
                 source $user_home/.bashrc
-                echo "$(date) - $command installed." >> setuplog.txt
+                echo "$(date) - $command installed." | tee -a setuplog.txt
                 ;;
         esac
     else
-        echo "$(date) - $command is already installed." >> setuplog.txt
+        echo "$(date) - $command is already installed." | tee -a setuplog.txt
     fi
 done
 
@@ -107,14 +107,14 @@ then
             # Only run the child script if it is executable
             (./configure-git.sh "$user_email" "$user_name" "$user_home") || echo "$(date) - configure-git.sh script failed" >> setuplog.txt
         else
-            echo "$(date) - Failed to set execute permissions on configure-git.sh" >> setuplog.txt
-            echo "$(date) - Please run configure.sh manually" >> setuplog.txt
+            echo "$(date) - Failed to set execute permissions on configure-git.sh" | tee -a setuplog.txt
+            echo "$(date) - Please run configure.sh manually" | tee -a setuplog.txt
         fi
     else
-        echo "$(date) - Failed to download configure-git.sh" >> setuplog.txt
+        echo "$(date) - Failed to download configure-git.sh" | tee -a setuplog.txt
     fi
 else
-    echo "$(date) - Skipping git setup. Continuing with the script..." >> setuplog.txt
+    echo "$(date) - Skipping git setup. Continuing with the script..." | tee -a setuplog.txt
 fi
 
 #############################################
@@ -133,21 +133,21 @@ then
 
         if [ -x "$configure_dotfiles_script" ]; then
             # Only run the child script if it is executable
-            ./configure-dotfiles.sh $user_home || echo "$(date) - configure-dotfiles.sh script failed" >> setuplog.txt
+            ./configure-dotfiles.sh $user_home || echo "$(date) - configure-dotfiles.sh script failed" | tee -a setuplog.txt
             # Source dotfiles.
             test -e $user_home/.zshrc && source $user_home/.zshrc
             test -e $user_home/.bashrc && source $user_home/.bashrc
             test -e $user_home/.config/envman/PATH.env && source $user_home/.config/envman/PATH.env
             test -e $user_home/.dotfiles/.commonrc && source $user_home/.dotfiles/.commonrc
         else
-            echo "$(date) - Failed to set execute permissions on configure-dotfiles.sh" >> setuplog.txt
-            echo "$(date) - Please run configure-dotfiles.sh manually" >> setuplog.txt
+            echo "$(date) - Failed to set execute permissions on configure-dotfiles.sh" | tee -a setuplog.txt
+            echo "$(date) - Please run configure-dotfiles.sh manually" | tee -a setuplog.txt
         fi
     else
-        echo "$(date) - Failed to download configure-dotfiles.sh" >> setuplog.txt
+        echo "$(date) - Failed to download configure-dotfiles.sh" | tee -a setuplog.txt
     fi
 else
-    echo "$(date) - Skipping dotfiles setup. Continuing with the script..." >> setuplog.txt
+    echo "$(date) - Skipping dotfiles setup. Continuing with the script..." | tee -a setuplog.txt
 fi
 
 #######################
@@ -161,12 +161,12 @@ then
     echo "Please follow the instructions in your web browser to log in to Azure."
     # Perform an interactive login
     if az login; then
-        echo "$(date) - Successfully logged in to Azure." >> setuplog.txt
+        echo "$(date) - Successfully logged in to Azure." | tee -a setuplog.txt
     else
-        echo "$(date) - Failed to log in to Azure. Continuing with the script..." >> setuplog.txt
+        echo "$(date) - Failed to log in to Azure. Continuing with the script..." | tee -a setuplog.txt
     fi
 else
-    echo "$(date) - Skipping Azure login. Continuing with the script..." >> setuplog.txt
+    echo "$(date) - Skipping Azure login. Continuing with the script..." | tee -a setuplog.txt
 fi
 
 ############################
@@ -180,15 +180,15 @@ then
     # Perform an interactive configuration
     if databricks configure --token; then
         if databricks workspace ls >/dev/null 2>&1; then
-            echo "$(date) - Successfully verified Databricks CLI configuration." >> setuplog.txt
+            echo "$(date) - Successfully verified Databricks CLI configuration." | tee -a setuplog.txt
         else
-            echo "$(date) - Failed to verify Databricks CLI configuration. Please check your Databricks host and token." >> setuplog.txt
+            echo "$(date) - Failed to verify Databricks CLI configuration. Please check your Databricks host and token." | tee -a setuplog.txt
         fi
     else
-        echo "$(date) - Failed to configure Databricks CLI." >> setuplog.txt
+        echo "$(date) - Failed to configure Databricks CLI." | tee -a setuplog.txt
     fi
 else
-    echo "$(date) - Skipping Databricks CLI configuration. Continuing with the script..." >> setuplog.txt
+    echo "$(date) - Skipping Databricks CLI configuration. Continuing with the script..." | tee -a setuplog.txt
 fi
 
 ########################
@@ -217,24 +217,24 @@ then
 
     # Verify that the repository was cloned
     if [ $? -eq 0 ]; then
-        echo "$(date) - Successfully cloned the repository." >> setuplog.txt
+        echo "$(date) - Successfully cloned the repository." | tee -a setuplog.txt
         cd $repository
         code .
         # Check if Visual Studio Code is running
         if pgrep -x "code" > /dev/null
         then
-            echo "Visual Studio Code is running." >> setuplog.txt
-            ./configure-vscode-extentions.sh || echo "Failed to run configure-vscode-extentions.sh" >> setuplog.txt
-            ./configure-poetry.sh $repository $user_home || echo "Failed to run configure-poetry.sh" >> setuplog.txt
+            echo "Visual Studio Code is running." | tee -a setuplog.txt
+            ./configure-vscode-extentions.sh || echo "Failed to run configure-vscode-extentions.sh" | tee -a setuplog.txt
+            ./configure-poetry.sh $repository $user_home || echo "Failed to run configure-poetry.sh" | tee -a setuplog.txt
             source $user_home/.bashrc
         else
-            echo "$(date) - Visual Studio Code failed to start." >> setuplog.txt
+            echo "$(date) - Visual Studio Code failed to start." | tee -a setuplog.txt
         fi
     else
-        echo "$(date) - Failed to clone the repository." >> setuplog.txt
+        echo "$(date) - Failed to clone the repository." | tee -a setuplog.txt
     fi
 else
-    echo "$(date) - Skipping repo cloning. Continuing with the script..." >> setuplog.txt
+    echo "$(date) - Skipping repo cloning. Continuing with the script..." | tee -a setuplog.txt
 fi
 
 echo "#####################  setup.sh done! #######################" >> setuplog.txt
