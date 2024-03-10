@@ -130,7 +130,7 @@ then
 
         if [ -x "$configure_dotfiles_script" ]; then
             # Only run the child script if it is executable
-            ./configure-dotfiles.sh || echo "$(date) - configure-dotfiles.sh script failed" >> setuplog.txt
+            ./configure-dotfiles.sh $user_home || echo "$(date) - configure-dotfiles.sh script failed" >> setuplog.txt
             # Source dotfiles.
             test -e $user_home/.zshrc && source $user_home/.zshrc
             test -e $user_home/.bashrc && source $user_home/.bashrc
