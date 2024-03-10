@@ -11,7 +11,13 @@ if ! command -v git-credential-manager &> /dev/null; then
 else
     # Prompt the user for their Azure DevOps PAT
     echo "Please enter your Azure DevOps PAT:"
-    read -s azure_pat
+
+    # Disable echo
+    stty -echo
+    read -p azure_pat
+    # Enable echo
+    stty echo
+    echo
 
     # Store the Azure DevOps PAT in git-credential-manager
     echo "protocol=https
