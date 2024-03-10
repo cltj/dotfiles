@@ -5,6 +5,7 @@ git
 python3-pip
 python3.10
 gnupg
+pass
 pipx
 ca-certificates
 apt-transport-https
