@@ -78,7 +78,9 @@ do
                 ;;
             "poetry")
                 mkdir -v -p $user_home/.poetry/bin
-                curl -sSL https://install.python-poetry.org | sudo python3 - --prefix=$user_home/.poetry/bin
+                sudo POETRY_HOME="$user_home/.poetry/bin" python3 - < <(curl -sSL https://install.python-poetry.org)
+                export PATH="$user_home/.poetry/bin:$PATH"
+                source $user_home/.bashrc
                 echo "$(date) - $command installed." >> setuplog.txt
                 ;;
         esac
