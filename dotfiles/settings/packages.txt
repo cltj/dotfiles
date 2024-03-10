@@ -3,6 +3,7 @@ zsh
 gh
 git
 python3-pip
+python3.10
 gnupg
 pipx
 ca-certificates

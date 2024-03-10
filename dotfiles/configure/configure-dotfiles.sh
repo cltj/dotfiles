@@ -1,5 +1,5 @@
 #!/bin/sh
-
+echo "#################### configuring dotfiles ###################" >> setuplog.txt
 # Ensure the Fira Code Nerd Font is installed.
 mkdir -v -p ~/.local/share/fonts/
 for type in Bold Light Medium Regular Retina; do 
@@ -25,22 +25,21 @@ wget -O ~/.dotfiles/.commonrc "https://raw.githubusercontent.com/cltj/dotfiles/m
 wget -O ~/.dotfiles/.zshrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.zshrc"
 wget -O ~/.dotfiles/.bashrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.bashrc"
 
-
-echo "Creating zsh symlinks..."
+# Ensure dotfiles are symlinked.
 rm -v -f ~/.zshrc
-ln -v -s ~/.dotfiles/.zshrc ~/.zshrc
+ln -v -s ~/.dotfiles/.zshrc ~/.zshrc && echo "Created symlink for .zshrc" >> setuplog.txt || echo "Failed to create symlink for .zshrc" >> setuplog.txt
         
-echo "Creating bash symlinks..."
 rm -v -f ~/.bashrc
-ln -v -s ~/.dotfiles/.bashrc ~/.bashrc
+ln -v -s ~/.dotfiles/.bashrc ~/.bashrc && echo "Created symlink for .bashrc" >> setuplog.txt || echo "Failed to create symlink for .bashrc" >> setuplog.txt
 
 mkdir -v -p ~/.config
 rm -v -f ~/.config/starship.toml
-ln -v -s ~/.dotfiles/starship.toml ~/.config/starship.toml
+ln -v -s ~/.dotfiles/starship.toml ~/.config/starship.toml && echo "Created symlink for starship.toml" >> setuplog.txt || echo "Failed to create symlink for starship.toml" >> setuplog.txt
 
 # Source dotfiles.
 test -e ~/.zshrc && . ~/.zshrc
 test -e ~/.bashrc && . ~/.bashrc
 
 # Finished
-echo "Done. Remember to move or symlink any local rc to ~/.localrc"
+echo "Remember to move or symlink any local rc to ~/.localrc" >> setuplog.txt
+echo "################ configure-dotfiles.sh done #####################" >> setuplog.txt

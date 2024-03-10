@@ -1,31 +1,28 @@
 #!/bin/bash
-
+echo "############## Running configure-vscode-extentions.sh ####################" >> setuplog.txt
 # URL of the extensions list
 EXTENSIONS_URL="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/settings/vs-code-extensions.txt"
 
 # Check if Visual Studio Code command 'code' is available
 if ! command -v code &> /dev/null
 then
-    echo "Visual Studio Code command 'code' could not be found"
-    exit 1
+    echo "$(date) - Visual Studio Code command 'code' could not be found" >> setuplog.txt
+    return 1
 fi
 
 # Check if curl is available
 if ! command -v curl &> /dev/null
 then
-    echo "curl could not be found"
-    exit 1
+    echo "$(date) - curl could not be found" >> setuplog.txt
+    return 1
 fi
 
 # Fetch the list and install extensions
-echo "Fetching extension list from $EXTENSIONS_URL"
-curl -s $EXTENSIONS_URL | while IFS= read -r extension; do
-    if [ -n "$extension" ]; then  # Ensure the line is not empty
-        echo "Attempting to install $extension"
-        code --install-extension "$extension" --force || echo "Failed to install $extension"
-    else
-        echo "Encountered an empty line, skipping..."
-    fi
+echo "$(date) - Fetching extension list from $EXTENSIONS_URL" >> setuplog.txt
+curl -s $EXTENSIONS_URL | grep -v '^$' | while IFS= read -r extension; do
+    echo "$(date) - Attempting to install $extension" >> setuplog.txt
+    code --install-extension "$extension" --force || echo "$(date) - Failed to install $extension" >> setuplog.txt
 done
 
-echo "All extensions have been installed."
+echo "$(date) - All extensions have been installed." >> setuplog.txt
+echo "############## configure-vscode-extentions.sh done! ####################" >> setuplog.txt
