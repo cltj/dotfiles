@@ -20,10 +20,7 @@ else
     echo "$masked_pat"
 
     # Store the Azure DevOps PAT in git-credential-manager
-    echo "protocol=https
-    host=dev.azure.com
-    username=$user_name
-    password=$azure_pat" | git credential-manager store
+    echo -e "protocol=https\nhost=dev.azure.com\nusername=$user_name\npassword=$azure_pat" | git credential-manager store
 
     # Verify that the PAT was stored
     if [ $? -eq 0 ]; then
