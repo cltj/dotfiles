@@ -22,6 +22,22 @@ if ! command -v git-credential-manager &> /dev/null; then
     echo "git-credential-manager is required but not installed. Please install it first." >> setuplog.txt
     return 1
 fi
+
+echo "Setting up git" >> setuplog.txt
+# Attempt to find the path to git-credential-manager
+credential_manager_path=$(which git-credential-manager)
+# Set Git global configurations
+git config --file "$user_home/.gitconfig" user.email "$user_email"
+git config --file "$user_home/.gitconfig" user.name "$user_name"
+git config --file "$user_home/.gitconfig" credential.helper "$credential_manager_path"
+git config --file "$user_home/.gitconfig" credential.useHttpPath true
+git config --file "$user_home/.gitconfig" credential.credentialStore gpg
+# Verify that the Git global configurations were set
+if [ -f "$user_home/.gitconfig" ]; then
+    echo "Git global configuration has been updated." >> setuplog.txt
+fi
+
+
 # setup gpg
 echo "Setting up gpg" >> setuplog.txt
 # Generate a new GPG key
@@ -39,18 +55,7 @@ else
     echo "Failed to create GPG key." >> setuplog.txt
 fi
 
-# Attempt to find the path to git-credential-manager
-credential_manager_path=$(which git-credential-manager)
-# Set Git global configurations
-sudo -u $user_name git config --global user.email "$user_email"
-sudo -u $user_name git config --global user.name "$user_name"
-sudo -u $user_name git config --global credential.helper "$credential_manager_path"
-sudo -u $user_name git config --global credential.useHttpPath true
-sudo -u $user_name git config --global credential.credentialStore gpg
-# Verify that the Git global configurations were set
-if [ -f "$user_home/.gitconfig" ]; then
-    echo "Git global configuration has been updated." >> setuplog.txt
-fi
+
 # Prompt the user for their Azure DevOps PAT and read it into a variable
 read -sp "Enter your Azure DevOps PAT: " azure_pat
 echo
