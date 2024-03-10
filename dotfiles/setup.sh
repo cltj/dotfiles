@@ -74,6 +74,7 @@ do
                 ;;
             "git-credential-manager")
                 wget "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.4.1/gcm-linux_amd64.2.4.1.deb" -O /tmp/gcmcore.deb && sudo dpkg -i /tmp/gcmcore.deb
+                sudo apt update
                 ;;
             "poetry")
                 mkdir -v -p $user_home/.poetry/bin
@@ -130,7 +131,8 @@ then
 
         if [ -x "$configure_dotfiles_script" ]; then
             # Only run the child script if it is executable
-            ./configure-dotfiles.sh $user_home || echo "$(date) - configure-dotfiles.sh script failed" >> setuplog.txt
+            ./configure-dotfiles.sh $user_homell
+             || echo "$(date) - configure-dotfiles.sh script failed" >> setuplog.txt
             # Source dotfiles.
             test -e $user_home/.zshrc && source $user_home/.zshrc
             test -e $user_home/.bashrc && source $user_home/.bashrc
