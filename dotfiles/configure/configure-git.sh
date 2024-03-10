@@ -9,26 +9,6 @@ echo "Run as: $user_email , $user_name , $user_home" >> setuplog.txt
 if ! command -v git-credential-manager &> /dev/null; then
     echo "git-credential-manager is required but not installed. Please install it first." >> setuplog.txt
 else
-    # Prompt the user for their Azure DevOps PAT and read it into a variable
-    read -sp "Enter your Azure DevOps PAT: " azure_pat
-    echo
-
-    # Replace each character of the PAT with a * and store the result in a variable
-    masked_pat=$(echo "$azure_pat" | sed 's/./*/g')
-
-    # Display the masked PAT
-    echo "$masked_pat"
-
-    # Store the Azure DevOps PAT in git-credential-manager
-    echo -e "protocol=https\nhost=dev.azure.com\nusername=$user_name\npassword=$azure_pat" | git credential-manager store
-
-    # Verify that the PAT was stored
-    if [ $? -eq 0 ]; then
-        echo "Azure DevOps PAT stored successfully." >> setuplog.txt
-    else
-        echo "Failed to store Azure DevOps PAT." >> setuplog.txt
-    fi
-
     # Attempt to find the path to git-credential-manager
     credential_manager_path=$(which git-credential-manager)
 
@@ -41,10 +21,33 @@ else
     git config --global user.email "$user_email"
     git config --global user.name "$user_name"
     git config --global credential.helper "$credential_manager_path"
+    git config --global credential.useHttpPath true
     fi
 
     if [ -f "$user_home/.gitconfig" ]; then
         echo "Git global configuration has been updated." >> setuplog.txt
+    fi
+
+    # Prompt the user for their Azure DevOps PAT and read it into a variable
+    read -sp "Enter your Azure DevOps PAT: " azure_pat
+    echo
+
+    # Replace each character of the PAT with a * and store the result in a variable
+    masked_pat=$(echo "$azure_pat" | sed 's/./*/g')
+
+    # Display the masked PAT
+    echo "$masked_pat"
+
+    read -p "Enter your your organization: " organization
+
+    # Store the Azure DevOps PAT in git-credential-manager
+    echo -e "protocol=https\nhost=$organization.visualstudio.com\nusername=$user_name\npassword=$azure_pat" | git credential-manager store
+
+    # Verify that the PAT was stored
+    if [ $? -eq 0 ]; then
+        echo "Azure DevOps PAT stored successfully." >> setuplog.txt
+    else
+        echo "Failed to store Azure DevOps PAT." >> setuplog.txt
     fi
 fi
 echo "############### configure-git.sh done! #################" >> setuplog.txt
