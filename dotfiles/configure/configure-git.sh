@@ -65,7 +65,7 @@ masked_pat=$(echo "$azure_pat" | sed 's/./*/g')
 echo "$masked_pat"
 read -p "Enter your your organization: " organization
 # Store the Azure DevOps PAT in git-credential-manager
-echo -e "protocol=https\nhost=$organization.visualstudio.com\nusername=$user_name\npassword=$azure_pat" | git credential-manager store
+echo -e "protocol=https\nhost=$organization.visualstudio.com\nusername=$user_name\npassword=$azure_pat" | git-credential-manager store
 # Verify that the PAT was stored
 if [ $? -eq 0 ]; then
     echo "Azure DevOps PAT stored successfully." | tee -a setuplog.txt
