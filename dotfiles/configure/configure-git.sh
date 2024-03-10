@@ -44,10 +44,10 @@ echo "Setting up gpg" | tee -a setuplog.txt
 
 sudo -u $user_name gpg --gen-key
 # List GPG keys to find the GPG key ID
-gpg_output=$(gpg --list-secret-keys --keyid-format LONG)
+gpg_output=$(sudo -u $user_name gpg --list-secret-keys --keyid-format LONG)
 # Export the GPG key ID to a variable
 key_id=$(echo "$gpg_output" | grep -Po 'rsa3072/\K[^ ]+' | head -n 1)
-pass init "$key_id"
+sudo -u $user_name pass init "$key_id"
 # Verify that the GPG key was created
 if [ $? -eq 0 ]; then
     echo "GPG key created successfully." | tee -a setuplog.txt
