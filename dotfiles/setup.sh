@@ -90,8 +90,9 @@ do
 done
 
 
-configure_git_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-ext.sh"
-configure_git_script="$user_home/configure-vscode-ext.sh"
+configure_vscode_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-ext.sh"
+configure_vscode_script="$user_home/configure-vscode-ext.sh"
+chmod +x "$configure_vscode_script"
 
 #############################################
 # Download the configure-dotfiles.sh script #
