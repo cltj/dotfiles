@@ -62,7 +62,7 @@ do
                 ;;
             "databricks")
                 curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sudo sh
-                echo "$(date) - $command installed." >> setuplog.txt
+                echo "$(date) - $command installed." | tee -a setuplog.txt
                 ;;
             "az")
                 curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
@@ -89,33 +89,9 @@ do
     fi
 done
 
-########################################
-# Download the configure-git.sh script #
-########################################
-read -t 60 -p "Do you want to setup git? (y/n) " answer
 
-if [[ $answer =~ ^[Yy]$ ]]
-then
-    configure_git_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-git.sh"
-    configure_git_script="./configure-git.sh"
-
-    if curl -s -o "$configure_git_script" "$configure_git_script_url"; then
-        # Only try to set permissions and run the script if the download succeeded
-        chmod +x "$configure_git_script"
-
-        if [ -x "$configure_git_script" ]; then
-            # Only run the child script if it is executable
-            (./configure-git.sh "$user_email" "$user_name" "$user_home") || echo "$(date) - configure-git.sh script failed" >> setuplog.txt
-        else
-            echo "$(date) - Failed to set execute permissions on configure-git.sh" | tee -a setuplog.txt
-            echo "$(date) - Please run configure.sh manually" | tee -a setuplog.txt
-        fi
-    else
-        echo "$(date) - Failed to download configure-git.sh" | tee -a setuplog.txt
-    fi
-else
-    echo "$(date) - Skipping git setup. Continuing with the script..." | tee -a setuplog.txt
-fi
+configure_git_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-ext.sh"
+configure_git_script="$user_home/configure-vscode-ext.sh"
 
 #############################################
 # Download the configure-dotfiles.sh script #
@@ -148,6 +124,34 @@ then
     fi
 else
     echo "$(date) - Skipping dotfiles setup. Continuing with the script..." | tee -a setuplog.txt
+fi
+
+########################################
+# Download the configure-git.sh script #
+########################################
+read -t 60 -p "Do you want to setup git? (y/n) " answer
+
+if [[ $answer =~ ^[Yy]$ ]]
+then
+    configure_git_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-git.sh"
+    configure_git_script="$user_home/configure-git.sh"
+
+    if curl -s -o "$configure_git_script" "$configure_git_script_url"; then
+        # Only try to set permissions and run the script if the download succeeded
+        chmod +x "$configure_git_script"
+
+        if [ -x "$configure_git_script" ]; then
+            # Only run the child script if it is executable
+            (./configure-git.sh "$user_email" "$user_name" "$user_home") || echo "$(date) - configure-git.sh script failed" >> setuplog.txt
+        else
+            echo "$(date) - Failed to set execute permissions on configure-git.sh" | tee -a setuplog.txt
+            echo "$(date) - Please run configure.sh manually" | tee -a setuplog.txt
+        fi
+    else
+        echo "$(date) - Failed to download configure-git.sh" | tee -a setuplog.txt
+    fi
+else
+    echo "$(date) - Skipping git setup. Continuing with the script..." | tee -a setuplog.txt
 fi
 
 #######################

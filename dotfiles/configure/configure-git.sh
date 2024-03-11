@@ -38,6 +38,7 @@ export GCM_CREDENTIAL_STORE=gpg
 # Verify that the Git global configurations were set
 if [ -f "$user_home/.gitconfig" ]; then
     echo "Git global configuration has been updated." | tee -a setuplog.txt
+    git config --list | tee -a setuplog.txt
 fi
 
 
@@ -59,23 +60,23 @@ else
 fi
 
 
-# # Prompt the user for their Azure DevOps PAT and read it into a variable
-# read -sp "Enter your Azure DevOps PAT: " azure_pat
-# echo
-# # Replace each character of the PAT with a * and store the result in a variable
-# masked_pat=$(echo "$azure_pat" | sed 's/./*/g')
-# # Display the masked PAT
-# echo "$masked_pat"
-# read -p "Enter your your organization: " organization
-# git-credential-manager azure-repos bind $organization $user_email
-# # Store the Azure DevOps PAT in git-credential-manager
-# echo -e "protocol=https\nhost=$organization.visualstudio.com\nusername=$user_email\npassword=$azure_pat" | git-credential-manager store
+# Prompt the user for their Azure DevOps PAT and read it into a variable
+read -sp "Enter your Azure DevOps PAT: " azure_pat
+echo
+# Replace each character of the PAT with a * and store the result in a variable
+masked_pat=$(echo "$azure_pat" | sed 's/./*/g')
+# Display the masked PAT
+echo "$masked_pat"
+read -p "Enter your your organization: " organization
+git-credential-manager azure-repos bind $organization $user_email
+# Store the Azure DevOps PAT in git-credential-manager
+echo -e "protocol=https\nhost=$organization.visualstudio.com\nusername=$user_email\npassword=$azure_pat" | git-credential-manager store
 
-# # Verify that the PAT was stored
-# if [ $? -eq 0 ]; then
-#     echo "Azure DevOps PAT stored successfully." | tee -a setuplog.txt
-# else
-#     echo "Failed to store Azure DevOps PAT." | tee -a setuplog.txt
-# fi
+# Verify that the PAT was stored
+if [ $? -eq 0 ]; then
+    echo "Azure DevOps PAT stored successfully." | tee -a setuplog.txt
+else
+    echo "Failed to store Azure DevOps PAT." | tee -a setuplog.txt
+fi
 
 echo "############### configure-git.sh done! #################" | tee -a setuplog.txt
