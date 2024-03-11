@@ -125,7 +125,7 @@ read -t 60 -p "Do you want to setup dotfiles? (y/n) " answer
 if [[ $answer =~ ^[Yy]$ ]]
 then
     configure_dotfiles_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-dotfiles.sh"
-    configure_dotfiles_script="./configure-dotfiles.sh"
+    configure_dotfiles_script="$user_home/configure-dotfiles.sh"
 
     if curl -s -o "$configure_dotfiles_script" "$configure_dotfiles_script_url"; then
         # Only try to set permissions and run the script if the download succeeded
@@ -133,7 +133,7 @@ then
 
         if [ -x "$configure_dotfiles_script" ]; then
             # Only run the child script if it is executable
-            ./configure-dotfiles.sh $user_home || echo "$(date) - configure-dotfiles.sh script failed" | tee -a setuplog.txt
+            $configure_dotfiles_script $user_home || echo "$(date) - configure-dotfiles.sh script failed" | tee -a setuplog.txt
             # Source dotfiles.
             test -e $user_home/.zshrc && source $user_home/.zshrc
             test -e $user_home/.bashrc && source $user_home/.bashrc
