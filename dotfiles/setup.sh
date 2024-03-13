@@ -122,7 +122,7 @@ fi
 #############################################
 # Download the configure-dotfiles.sh script #
 #############################################
-read -t 60 -p "Do you want to setup dotfiles? (y/n) " answer
+read -p "Do you want to setup dotfiles? (y/n) " answer
 
 if [[ $answer =~ ^[Yy]$ ]]
 then
@@ -155,7 +155,7 @@ fi
 ########################################
 # Download the configure-git.sh script #
 ########################################
-read -t 60 -p "Do you want to setup git? (y/n) " answer
+read -p "Do you want to setup git? (y/n) " answer
 
 if [[ $answer =~ ^[Yy]$ ]]
 then
@@ -183,7 +183,7 @@ fi
 #######################
 # Configure azure cli #
 #######################
-read -t 60 -p "Do you want to log in to Azure? (y/n) " answer
+read -p "Do you want to log in to Azure? (y/n) " answer
 
 if [[ $answer =~ ^[Yy]$ ]]
 then
@@ -201,7 +201,7 @@ fi
 ############################
 # Configure Databricks CLI #
 ############################
-read -t 60 -p "Do you want to configure Databricks CLI? (y/n) " answer
+read -p "Do you want to configure Databricks CLI? (y/n) " answer
 
 if [[ $answer =~ ^[Yy]$ ]]
 then
@@ -223,7 +223,7 @@ fi
 ########################
 # Clone the repository #
 ########################
-# read -t 60 -p "Do you want to clone repo? (y/n) " answer
+# read -p "Do you want to clone repo? (y/n) " answer
 
 # if [[ $answer =~ ^[Yy]$ ]]
 # then
