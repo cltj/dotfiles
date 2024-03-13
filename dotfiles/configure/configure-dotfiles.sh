@@ -17,7 +17,7 @@ export PATH="$user_home/.local/bin:$PATH"
 
 # Ensure McFly is installed.
 mkdir -v -p $user_home/.local/share/mcfly
-curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly --to $user_home/.local/share/mcfly
+curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly --to $user_home/.local /share/mcfly
 
 # Ensure zoxide is installed.
 curl -sS https://webinstall.dev/zoxide | bash
