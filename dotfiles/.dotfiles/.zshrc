@@ -9,6 +9,10 @@ export PATH="/home/tj/.local/bin/poetry:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export HISTSIZE=1000
 export SAVEHIST=2000
+export GPG_TTY=$(tty)
+export GCM_CREDENTIAL_STORE="gpg"
+export GCM_PROVIDER="azure-repos"
+export GCM_AZREPOS_CREDENTIALTYPE="oauth"
 
 bindkey "^[[A" history-beginning-search-backward
 bindkey "^[[B" history-beginning-search-forward

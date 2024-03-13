@@ -25,14 +25,14 @@ install_package() {
     if ! command -v $1 &> /dev/null; then
         ERRORS=$(sudo apt install -y $1 2>&1 >/dev/null)
         if [ $? -eq 0 ]; then
-            echo "$(date) - $1 installed." | tee -a setuplog.txt
+            echo "$(date) - $1 installed" | tee -a setuplog.txt
         else
             echo "$(date) - Failed to install $1. Error message: $ERRORS" | tee -a setuplog.txt
         fi
     else
         ERRORS=$(sudo apt upgrade -y $1 2>&1 >/dev/null)
         if [ $? -eq 0 ]; then
-            echo "$(date) - $1 updated." | tee -a setuplog.txt
+            echo "$(date) - $1 updated" | tee -a setuplog.txt
         else
             echo "$(date) - Failed to update $1. Error message: $ERRORS" | tee -a setuplog.txt
         fi

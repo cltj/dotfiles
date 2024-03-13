@@ -43,18 +43,6 @@ Open vs code by using `code .` command, close the application again and verify t
 ./configure-vscode-ext.sh
 ```
 
-If the setup script was not sucessfull in getting the script the first time you can get it from here
-
-```shell
-curl -o configure-vscode-extensions.sh https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-ext.sh
-```
-
-```shell
-chmod +x configure-vscode-extensions.sh && chmod u+x setuplogs.txt
-```
-
-
-
 ## Install poetry
 Poetry should already be installed by the setup script. You can check by typing in
 

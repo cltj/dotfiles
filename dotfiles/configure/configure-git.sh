@@ -1,29 +1,29 @@
 #!/bin/bash
-echo "################ configuring git ################" | tee -a setuplog.txt
+echo "########################### configuring git ##############################" | tee -a setuplog.txt
 # Assign passed arguments to variables
 user_email="$1"
 user_name="$2"
 user_home="$3"
-echo "Run as: $user_email , $user_name , $user_home" | tee -a setuplog.txt
+echo "$(date) - Run as: $user_email , $user_name , $user_home" | tee -a setuplog.txt
 
 # Check if gpg is installed
 if ! command -v gpg &> /dev/null; then
-    echo "gpg is required but not installed. Please install it first." | tee -a setuplog.txt
+    echo "$(date) - gpg is required but not installed. Please install it first." | tee -a setuplog.txt
     return 1
 fi
 
 # Check if pass is installed
 if ! command -v pass &> /dev/null; then
-    echo "pass is required but not installed. Please install it first." | tee -a setuplog.txt
+    echo "$(date) - pass is required but not installed. Please install it first." | tee -a setuplog.txt
     return 1
 fi
 # Check if git-credential-manager is installed
 if ! command -v git-credential-manager &> /dev/null; then
-    echo "git-credential-manager is required but not installed. Please install it first." | tee -a setuplog.txt
+    echo "$(date) - git-credential-manager is required but not installed. Please install it first." | tee -a setuplog.txt
     return 1
 fi
 
-echo "Setting up git" | tee -a setuplog.txt
+echo "$(date) - Setting up git" | tee -a setuplog.txt
 # Attempt to find the path to git-credential-manager
 credential_manager_path=$(which git-credential-manager)
 # Set Git global configurations
@@ -37,7 +37,7 @@ export GCM_CREDENTIAL_STORE=gpg
 
 # Verify that the Git global configurations were set
 if [ -f "$user_home/.gitconfig" ]; then
-    echo "Git global configuration has been updated." | tee -a setuplog.txt
+    echo "$(date) - Git global configuration has been updated." | tee -a setuplog.txt
     git config --list | tee -a setuplog.txt
 fi
 
@@ -79,4 +79,4 @@ else
     echo "Failed to store Azure DevOps PAT." | tee -a setuplog.txt
 fi
 
-echo "############### configure-git.sh done! #################" | tee -a setuplog.txt
+echo "###################### configure-git.sh done! ########################" | tee -a setuplog.txt
