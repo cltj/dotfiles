@@ -28,7 +28,7 @@ wget -O $user_home/.dotfiles/starship.toml "https://raw.githubusercontent.com/cl
 wget -O $user_home/.dotfiles/.commonrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.commonrc"
 wget -O $user_home/.dotfiles/.zshrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.zshrc"
 wget -O $user_home/.dotfiles/.bashrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.bashrc"
-wget -O $user_home/.gitconfig "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.gitconfig"
+# wget -O $user_home/.gitconfig "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.gitconfig"
 
 # Ensure dotfiles are symlinked.
 rm -v -f $user_home/.zshrc
