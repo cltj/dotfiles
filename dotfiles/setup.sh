@@ -23,16 +23,18 @@ sudo apt upgrade -y && sudo apt autoremove -y
 ####################
 install_package() {
     if ! command -v $1 &> /dev/null; then
-        if sudo apt install -y $1; then
-            echo "$(date) - $1 installed." >> setuplog.txt
+        ERRORS=$(sudo apt install -y $1 2>&1 >/dev/null)
+        if [ $? -eq 0 ]; then
+            echo "$(date) - $1 installed." | tee -a setuplog.txt
         else
-            echo "$(date) - $1 is not a valid package." >> setuplog.txt
+            echo "$(date) - Failed to install $1. Error message: $ERRORS" | tee -a setuplog.txt
         fi
     else
-        if sudo apt upgrade -y $1; then
-            echo "$(date) - $1 updated." >> setuplog.txt
+        ERRORS=$(sudo apt upgrade -y $1 2>&1 >/dev/null)
+        if [ $? -eq 0 ]; then
+            echo "$(date) - $1 updated." | tee -a setuplog.txt
         else
-            echo "$(date) - Failed to update $1. Check if it's a valid package." >> setuplog.txt
+            echo "$(date) - Failed to update $1. Error message: $ERRORS" | tee -a setuplog.txt
         fi
     fi
 }
@@ -44,20 +46,33 @@ done
 ###########################################
 # Check if installed, if not install them #
 ###########################################
-commands=("zsh" "databricks" "az" "git-credential-manager" "poetry")
+commands=("zsh" "databricks" "az" "git-credential-manager") #"poetry"
 for command in "${commands[@]}"
 do
     if ! command -v $command &> /dev/null
     then
+    ERRORS=$(sudo apt install -y $1 2>&1 >/dev/null)
         echo "Installing $command..."
         case $command in
             "zsh")
+                # Check if oh-my-zsh is installed
                 if [ ! -d "$user_home/.oh-my-zsh" ]
                 then
                     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
                     chsh -s /bin/zsh $user_name
-                    sudo apt install fzf -y && sudo apt install zsh-autosuggestions -y
-                    echo "$(date) - $command installed." | tee -a setuplog.txt
+                    echo "$(date) - oh-my-zsh installed." | tee -a setuplog.txt
+                fi
+                # Check if fzf is installed
+                if ! command -v fzf &> /dev/null
+                then
+                    sudo apt install fzf -y
+                    echo "$(date) - fzf installed." | tee -a setuplog.txt
+                fi
+                # Check if zsh-autosuggestions is installed
+                if [ ! -d "$user_home/.oh-my-zsh/plugins/zsh-autosuggestions" ]
+                then
+                    sudo apt install zsh-autosuggestions -y
+                    echo "$(date) - zsh-autosuggestions installed." | tee -a setuplog.txt
                 fi
                 ;;
             "databricks")
@@ -73,26 +88,36 @@ do
                 echo "$(date) - $command installed." | tee -a setuplog.txt
                 ;;
             "git-credential-manager")
-                wget "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.4.1/gcm-linux_amd64.2.4.1.deb" -O /tmp/gcmcore.deb && sudo dpkg -i /tmp/gcmcore.deb
+                curl -L "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.4.1/gcm-linux_amd64.2.4.1.deb" -O /tmp/gcmcore.deb && sudo dpkg -i /tmp/gcmcore.deb
                 sudo apt update
                 ;;
-            "poetry")
-                mkdir -v -p $user_home/.poetry/bin
-                sudo POETRY_HOME="$user_home/.poetry/bin" python3 - < <(curl -sSL https://install.python-poetry.org)
-                export PATH="$user_home/.poetry/bin:$PATH"
-                source $user_home/.bashrc
-                echo "$(date) - $command installed." | tee -a setuplog.txt
-                ;;
+            # "poetry")
+            #     mkdir -v -p $user_home/.poetry/bin
+            #     sudo POETRY_HOME="$user_home/.poetry/bin" python3 - < <(curl -sSL https://install.python-poetry.org)
+            #     export PATH="$user_home/.poetry/bin:$PATH"
+            #     source $user_home/.bashrc
+            #     echo "$(date) - $command installed." | tee -a setuplog.txt
+            #     ;;
         esac
     else
         echo "$(date) - $command is already installed." | tee -a setuplog.txt
     fi
 done
 
+# Give rights to log file
+chmod u+w setuplog.txt
 
+###############################################
+# Download the configure-vscode-ext.sh script #
+###############################################
 configure_vscode_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-ext.sh"
 configure_vscode_script="$user_home/configure-vscode-ext.sh"
-chmod +x "$configure_vscode_script"
+if curl -s -o "$configure_vscode_script" "$configure_vscode_url"; then
+    # Only try to set permissions and run the script if the download succeeded
+    chmod u+x "$configure_vscode_script"
+else
+    echo "$(date) - Failed to download configure-vscode-ext.sh" | tee -a setuplog.txt
+fi
 
 #############################################
 # Download the configure-dotfiles.sh script #
@@ -158,7 +183,6 @@ fi
 #######################
 # Configure azure cli #
 #######################
-# Prompt the user to perform an interactive login
 read -t 60 -p "Do you want to log in to Azure? (y/n) " answer
 
 if [[ $answer =~ ^[Yy]$ ]]
@@ -199,47 +223,47 @@ fi
 ########################
 # Clone the repository #
 ########################
-read -t 60 -p "Do you want to clone repo? (y/n) " answer
+# read -t 60 -p "Do you want to clone repo? (y/n) " answer
 
-if [[ $answer =~ ^[Yy]$ ]]
-then
-    # Prompt the user for the organization, project, and repository names
-    echo "Please enter the Azure DevOps organization name:"
-    read organization
-    echo "Please enter the Azure DevOps project name:"
-    read project
-    echo "Please enter the Azure DevOps repository name:"
-    read repository
+# if [[ $answer =~ ^[Yy]$ ]]
+# then
+#     # Prompt the user for the organization, project, and repository names
+#     echo "Please enter the Azure DevOps organization name:"
+#     read organization
+#     echo "Please enter the Azure DevOps project name:"
+#     read project
+#     echo "Please enter the Azure DevOps repository name:"
+#     read repository
 
-    # Define the Azure DevOps repository URL
-    repo_url="https://dev.azure.com/${organization}/${project}/_git/${repository}"
+#     # Define the Azure DevOps repository URL
+#     repo_url="https://dev.azure.com/${organization}/${project}/_git/${repository}"
 
-    # Change to the /mnt/c/dev directory
-    cd /mnt/c/dev
+#     # Change to the /mnt/c/dev directory
+#     cd /mnt/c/dev
 
-    # Clone the repository
-    git clone $repo_url
+#     # Clone the repository
+#     git clone $repo_url
 
-    # Verify that the repository was cloned
-    if [ $? -eq 0 ]; then
-        echo "$(date) - Successfully cloned the repository." | tee -a setuplog.txt
-        cd $repository
-        code .
-        # Check if Visual Studio Code is running
-        if pgrep -x "code" > /dev/null
-        then
-            echo "Visual Studio Code is running." | tee -a setuplog.txt
-            ./configure-vscode-extentions.sh || echo "Failed to run configure-vscode-extentions.sh" | tee -a setuplog.txt
-            ./configure-poetry.sh $repository $user_home || echo "Failed to run configure-poetry.sh" | tee -a setuplog.txt
-            source $user_home/.bashrc
-        else
-            echo "$(date) - Visual Studio Code failed to start." | tee -a setuplog.txt
-        fi
-    else
-        echo "$(date) - Failed to clone the repository." | tee -a setuplog.txt
-    fi
-else
-    echo "$(date) - Skipping repo cloning. Continuing with the script..." | tee -a setuplog.txt
-fi
+#     # Verify that the repository was cloned
+#     if [ $? -eq 0 ]; then
+#         echo "$(date) - Successfully cloned the repository." | tee -a setuplog.txt
+#         cd $repository
+#         code .
+#         # Check if Visual Studio Code is running
+#         if pgrep -x "code" > /dev/null
+#         then
+#             echo "Visual Studio Code is running." | tee -a setuplog.txt
+#             ./configure-vscode-extentions.sh || echo "Failed to run configure-vscode-extentions.sh" | tee -a setuplog.txt
+#             ./configure-poetry.sh $repository $user_home || echo "Failed to run configure-poetry.sh" | tee -a setuplog.txt
+#             source $user_home/.bashrc
+#         else
+#             echo "$(date) - Visual Studio Code failed to start." | tee -a setuplog.txt
+#         fi
+#     else
+#         echo "$(date) - Failed to clone the repository." | tee -a setuplog.txt
+#     fi
+# else
+#     echo "$(date) - Skipping repo cloning. Continuing with the script..." | tee -a setuplog.txt
+# fi
 
 echo "#####################  setup.sh done! #######################" >> setuplog.txt

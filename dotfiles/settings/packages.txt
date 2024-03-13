@@ -12,4 +12,5 @@ apt-transport-https
 curl
 lsb-release
 fontconfig
+python3-poetry
 npm

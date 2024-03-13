@@ -18,6 +18,11 @@ chmod +x setup.sh
 sudo ./setup.sh
 ```
 
+After the script is done source your shell (the promt will now change)
+```shell
+. .bashrc
+```
+
 ![explanation.png](https://github.com/cltj/dotfiles/blob/6f9f72f212410e199d216cc9afa6beb49f1840a0/explanation.png)
 
 
@@ -31,32 +36,39 @@ updot
 
 ## VS code
 
-Open vs code by using `code .` command, close the application again and verify that you now have a folder called .vscode-server in your home directory. If that is the case you can install extentions like this. 
-```shell
-curl -o configure-vscode-extensions.sh https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-extentions.sh
-```
+Open vs code by using `code .` command, close the application again and verify that you now have a folder called `.vscode-server` in your home directory. You can now install the extensions
 
 
 ```shell
-chmod +x configure-vscode-extensions.sh
+./configure-vscode-ext.sh
+```
+
+If the setup script was not sucessfull in getting the script the first time you can get it from here
+
+```shell
+curl -o configure-vscode-extensions.sh https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-ext.sh
 ```
 
 ```shell
-sudo ./configure-vscode-extensions.sh
+chmod +x configure-vscode-extensions.sh && chmod u+x setuplogs.txt
 ```
+
+
 
 ## Install poetry
-```shell
-curl -sSL https://install.python-poetry.org | python3 -
-```
+Poetry should already be installed by the setup script. You can check by typing in
 
 ```shell
 poetry --version
 ```
-In the project
+
+Otherwise you have to get it from here
 ```shell
-poetry shell
+curl -sSL https://install.python-poetry.org | python3 -
 ```
+
+
+Navigate to the project folder, if you havent cloned the repo before you need to do this first
 
 ```shell
 poetry install
@@ -65,9 +77,13 @@ poetry install
 ```shell
 poetry update
 ```
-
+Check your environment info and export the virtual paths to your .bashrc
 ```shell
 poetry env info
+```
+
+```shell
+export /my/virtual/environment/path
 ```
 
 Configure you path for poetry and make sure test_setup.py works without
