@@ -30,8 +30,7 @@ credential_manager_path=$(which git-credential-manager)
 git config --file "$user_home/.gitconfig" user.email "$user_email"
 git config --file "$user_home/.gitconfig" user.name "$user_name"
 git config --file "$user_home/.gitconfig" credential.helper "$credential_manager_path"
-git config --file "$user_home/.gitconfig" credential.useHttpPath true
-git config --file "$user_home/.gitconfig" credential.credentialStore gpg
+
 
 export GCM_CREDENTIAL_STORE=gpg
 
@@ -68,7 +67,7 @@ masked_pat=$(echo "$azure_pat" | sed 's/./*/g')
 # Display the masked PAT
 echo "$masked_pat"
 read -p "Enter your your organization: " organization
-git-credential-manager azure-repos bind $organization $user_email
+
 # Store the Azure DevOps PAT in git-credential-manager
 echo -e "protocol=https\nhost=$organization.visualstudio.com\nusername=$user_email\npassword=$azure_pat" | git-credential-manager store
 
