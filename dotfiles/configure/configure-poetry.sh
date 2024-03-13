@@ -39,4 +39,4 @@ echo "export PATH=\$PATH:$poetry_executable_path" >> $user_home/.bashrc
 
 source $user_home/.bashrc
 
-echo "############### configure-poetry.sh done! #################" | tee -a setuplog.txt
+echo "############### configure-poetry.sh done! #################" >> setuplog.txt

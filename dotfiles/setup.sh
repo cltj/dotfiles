@@ -105,7 +105,7 @@ do
 done
 
 # Give rights to log file
-chmod u+w setuplog.txt
+chmod a+w setuplog.txt
 
 ###############################################
 # Download the configure-vscode-ext.sh script #
@@ -114,7 +114,7 @@ configure_vscode_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dot
 configure_vscode_script="$user_home/configure-vscode-ext.sh"
 if curl -s -o "$configure_vscode_script" "$configure_vscode_url"; then
     # Only try to set permissions and run the script if the download succeeded
-    chmod u+x "$configure_vscode_script"
+    chmod a+x "$configure_vscode_script"
 else
     echo "$(date) - Failed to download configure-vscode-ext.sh" | tee -a setuplog.txt
 fi
@@ -131,7 +131,7 @@ then
 
     if curl -s -o "$configure_dotfiles_script" "$configure_dotfiles_script_url"; then
         # Only try to set permissions and run the script if the download succeeded
-        chmod +x "$configure_dotfiles_script"
+        chmod a+x "$configure_dotfiles_script"
 
         if [ -x "$configure_dotfiles_script" ]; then
             # Only run the child script if it is executable
@@ -164,7 +164,7 @@ then
 
     if curl -s -o "$configure_git_script" "$configure_git_script_url"; then
         # Only try to set permissions and run the script if the download succeeded
-        chmod +x "$configure_git_script"
+        chmod a+x "$configure_git_script"
 
         if [ -x "$configure_git_script" ]; then
             # Only run the child script if it is executable
