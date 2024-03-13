@@ -13,14 +13,14 @@ else
 fi
 
 # Assign passed arguments to variables
-if ! command -v poetry &> /dev/null
-then
-    echo "Installing poetry..."
-    curl -sSL https://install.python-poetry.org | python3 -
-    echo "$(date) - Poetry version installed: $(poetry --version)" | tee -a setuplog.txt
-else
-    echo "$(date) - Poetry version installed: $(poetry --version)" | tee -a setuplog.txt
-fi
+# if ! command -v poetry &> /dev/null
+# then
+#     echo "Installing poetry..."
+#     curl -sSL https://install.python-poetry.org | python3 -
+#     echo "$(date) - Poetry version installed: $(poetry --version)" | tee -a setuplog.txt
+# else
+#     echo "$(date) - Poetry version installed: $(poetry --version)" | tee -a setuplog.txt
+# fi
 
 (
     cd $repository

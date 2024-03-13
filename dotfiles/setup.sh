@@ -223,47 +223,48 @@ fi
 ########################
 # Clone the repository #
 ########################
-# read -p "Do you want to clone repo? (y/n) " answer
+read -p "Do you want to clone repo? (y/n) " answer
 
-# if [[ $answer =~ ^[Yy]$ ]]
-# then
-#     # Prompt the user for the organization, project, and repository names
-#     echo "Please enter the Azure DevOps organization name:"
-#     read organization
-#     echo "Please enter the Azure DevOps project name:"
-#     read project
-#     echo "Please enter the Azure DevOps repository name:"
-#     read repository
+if [[ $answer =~ ^[Yy]$ ]]
+then
+    # Prompt the user for the organization, project, and repository names
+    echo "Please enter the Azure DevOps organization name:"
+    read organization
+    echo "Please enter the Azure DevOps project name:"
+    read project
+    echo "Please enter the Azure DevOps repository name:"
+    read repository
 
-#     # Define the Azure DevOps repository URL
-#     repo_url="https://dev.azure.com/${organization}/${project}/_git/${repository}"
+    # Define the Azure DevOps repository URL
+    repo_url="https://dev.azure.com/${organization}/${project}/_git/${repository}"
 
-#     # Change to the /mnt/c/dev directory
-#     cd /mnt/c/dev
+    # Change to the /mnt/c/dev directory
+    cd /mnt/c/dev
 
-#     # Clone the repository
-#     git clone $repo_url
+    # Clone the repository
+    git clone $repo_url
 
-#     # Verify that the repository was cloned
-#     if [ $? -eq 0 ]; then
-#         echo "$(date) - Successfully cloned the repository." | tee -a setuplog.txt
-#         cd $repository
-#         code .
-#         # Check if Visual Studio Code is running
-#         if pgrep -x "code" > /dev/null
-#         then
-#             echo "Visual Studio Code is running." | tee -a setuplog.txt
-#             ./configure-vscode-extentions.sh || echo "Failed to run configure-vscode-extentions.sh" | tee -a setuplog.txt
-#             ./configure-poetry.sh $repository $user_home || echo "Failed to run configure-poetry.sh" | tee -a setuplog.txt
-#             source $user_home/.bashrc
-#         else
-#             echo "$(date) - Visual Studio Code failed to start." | tee -a setuplog.txt
-#         fi
-#     else
-#         echo "$(date) - Failed to clone the repository." | tee -a setuplog.txt
-#     fi
-# else
-#     echo "$(date) - Skipping repo cloning. Continuing with the script..." | tee -a setuplog.txt
-# fi
+    # Verify that the repository was cloned
+    if [ $? -eq 0 ]; then
+        echo "$(date) - Successfully cloned the repository." | tee -a setuplog.txt
+        cd $repository
+    else
+        echo "$(date) - Failed to clone the repository." | tee -a setuplog.txt
+    fi
+else
+    echo "$(date) - Skipping repo cloning. Continuing with the script..." | tee -a setuplog.txt
+fi
+
+        # code .
+        # # Check if Visual Studio Code is running
+        # if pgrep -x "code" > /dev/null
+        # then
+        #     echo "Visual Studio Code is running." | tee -a setuplog.txt
+        #     ./configure-vscode-extentions.sh || echo "Failed to run configure-vscode-extentions.sh" | tee -a setuplog.txt
+        #     ./configure-poetry.sh $repository $user_home || echo "Failed to run configure-poetry.sh" | tee -a setuplog.txt
+        #     source $user_home/.bashrc
+        # else
+        #     echo "$(date) - Visual Studio Code failed to start." | tee -a setuplog.txt
+        # fi
 
 echo "#####################  setup.sh done! #######################" >> setuplog.txt
