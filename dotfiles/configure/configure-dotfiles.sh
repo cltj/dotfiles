@@ -3,7 +3,7 @@ echo "####################### configuring dotfiles ######################" | tee
 
 user_home="$1"
 echo "$(date) - Run as: $user_home" | tee -a setuplog.txt
-if 
+# if 
 # Ensure the Fira Code Nerd Font is installed.
 # mkdir -v -p $user_home/.local/share/fonts/
 # for type in Bold Light Medium Regular Retina; do 
