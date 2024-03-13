@@ -8,7 +8,7 @@ fi
 
 . ~/.dotfiles/.commonrc
 
-export PATH="~/.local/bin/poetry:$PATH"
+#export PATH="~/.local/bin/poetry:$PATH"
 export PATH="~/.local/bin:$PATH"
 export PATH="/usr/bin/poetry:$PATH"
 #export PATH="/home/tj/.cache/pypoetry/virtualenvs/fka-databricks-GAMMsPWM-py3.10/bin/python:$PATH"
