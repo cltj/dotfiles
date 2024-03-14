@@ -34,14 +34,6 @@ The installation script is idempotent, so to update your config to the latest ve
 updot
 ```
 
-## VS code
-
-Open vs code by using `code .` command, close the application again and verify that you now have a folder called `.vscode-server` in your home directory. You can now install the extensions
-
-
-```shell
-./configure-vscode-ext.sh
-```
 
 ## Install poetry
 ```shell
@@ -50,26 +42,10 @@ curl -sSL https://install.python-poetry.org | python3 -
 
 Check that you are on version 2.x
 ```shell
-poetry --version
+poetry self update
 ```
 
-Navigate to the project folder, if you havent cloned the repo before you need to do this first
 
-```shell
-poetry install
-```
-
-```shell
-poetry update
-```
-Check your environment info and export the virtual paths to your .bashrc
-```shell
-poetry env info
-```
-
-```shell
-export /my/virtual/environment/path
-```
 
 Configure you path for poetry and make sure test_setup.py works without
 When you have got your poetry environment setup check that setup_test.py is working correctly

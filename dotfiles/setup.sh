@@ -58,7 +58,7 @@ done
 ###########################################
 # Check if installed, if not install them #
 ###########################################
-commands=("databricks" "az" "git-credential-manager" "poetry") # "zsh"
+commands=("databricks" "az" "git-credential-manager")
 for command in "${commands[@]}"
 do
     if ! command -v $command &> /dev/null
@@ -81,11 +81,6 @@ do
             "git-credential-manager")
                 wget "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.4.1/gcm-linux_amd64.2.4.1.deb" -O /tmp/gcmcore.deb && sudo dpkg -i /tmp/gcmcore.deb
                 sudo apt update
-                ;;
-            "poetry")
-                sudo -u $user_name curl -sSL https://install.python-poetry.org | python3 -
-                poetry self update
-                echo "$(date) - $command installed." | tee -a setuplog.txt
                 ;;
         esac
     else
