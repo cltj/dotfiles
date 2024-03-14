@@ -58,7 +58,7 @@ done
 ###########################################
 # Check if installed, if not install them #
 ###########################################
-commands=("databricks" "az" "git-credential-manager") # "zsh"  "poetry"
+commands=("databricks" "az" "git-credential-manager" "poetry") # "zsh"
 for command in "${commands[@]}"
 do
     if ! command -v $command &> /dev/null
@@ -280,7 +280,7 @@ then
     cd /mnt/c/dev
 
     # Clone the repository
-    git clone $repo_url
+    git -u $user_name clone $repo_url
 
     # Verify that the repository was cloned
     if [ $? -eq 0 ]; then
