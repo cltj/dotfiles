@@ -284,6 +284,9 @@ then
 
     # Verify that the repository was cloned
     if [ $? -eq 0 ]; then
+        sudo -u $user_name mkdir -p "$repository/.vscode"
+        wget "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/settings/extensions.json" -O "$repository/.vscode/extensions.json"
+
         readme_contents=$(cat "$repository/README.md")
         cd $user_home
         echo "$(date) - $readme_contents in the $project project" | tee -a setuplog.txt
