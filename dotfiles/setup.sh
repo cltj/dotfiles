@@ -66,27 +66,6 @@ do
     ERRORS=$(sudo apt install -y $1 2>&1 >/dev/null)
         echo "Installing $command..."
         case $command in
-            # "zsh")
-            #     # Check if oh-my-zsh is installed
-            #     if [ ! -d "$user_home/.oh-my-zsh" ]
-            #     then
-            #         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-            #         chsh -s /bin/zsh $user_name
-            #         echo "$(date) - oh-my-zsh installed." | tee -a setuplog.txt
-            #     fi
-            #     # Check if fzf is installed
-            #     if ! command -v fzf &> /dev/null
-            #     then
-            #         sudo apt install fzf -y
-            #         echo "$(date) - fzf installed." | tee -a setuplog.txt
-            #     fi
-            #     # Check if zsh-autosuggestions is installed
-            #     if [ ! -d "$user_home/.oh-my-zsh/plugins/zsh-autosuggestions" ]
-            #     then
-            #         sudo apt install zsh-autosuggestions -y
-            #         echo "$(date) - zsh-autosuggestions installed." | tee -a setuplog.txt
-            #     fi
-            #     ;;
             "databricks")
                 curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sudo sh
                 echo "$(date) - $command installed." | tee -a setuplog.txt
@@ -117,17 +96,6 @@ done
 # Give rights to log file
 chmod a+w setuplog.txt
 
-###############################################
-# Download the configure-vscode-ext.sh script #
-###############################################
-# configure_vscode_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-ext.sh"
-# configure_vscode_script="$user_home/configure-vscode-ext.sh"
-# if curl -s -o "$configure_vscode_script" "$configure_vscode_url"; then
-#     # Only try to set permissions and run the script if the download succeeded
-#     chmod a+x "$configure_vscode_script"
-# else
-#     echo "$(date) - Failed to download configure-vscode-ext.sh" | tee -a setuplog.txt
-# fi
 
 #############################################
 # Download the configure-dotfiles.sh script #
@@ -230,33 +198,6 @@ else
     echo "$(date) - Skipping Databricks CLI configuration. Continuing with the script..." | tee -a setuplog.txt
 fi
 
-####################
-# Configure poetry #
-####################
-# read -p "Do you want to configure poetry globals? (y/n) " answer
-
-# if [[ $answer =~ ^[Yy]$ ]]
-# then
-#     configure_poetry_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-poetry.sh"
-#     configure_poetry_script="$user_home/configure-poetry.sh"
-
-#     if curl -s -o "$configure_poetry_script" "$configure_poetry_script_url"; then
-#         # Only try to set permissions and run the script if the download succeeded
-#         chmod a+x "$configure_poetry_script"
-
-#         if [ -x "$configure_poetry_script" ]; then
-#             # Only run the child script if it is executable
-#             (./configure-poetry.sh "$user_home") || echo "$(date) - configure-poetry.sh script failed" >> setuplog.txt
-#         else
-#             echo "$(date) - Failed to set execute permissions on configure-poetry.sh" | tee -a setuplog.txt
-#             echo "$(date) - Please set permissions and run manually" | tee -a setuplog.txt
-#         fi
-#     else
-#         echo "$(date) - Failed to download configure-poetry.sh" | tee -a setuplog.txt
-#     fi
-# else
-#     echo "$(date) - Skipping poetry setup. Continuing with the script..." | tee -a setuplog.txt
-# fi
 
 ######################
 # Clone a repository #
