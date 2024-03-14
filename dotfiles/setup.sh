@@ -1,7 +1,5 @@
 #!/bin/bash
 echo "#####################  Setup log #######################" >> setuplog.txt
-echo "Please enter your email:"
-read user_email
 
 if [ -n "$SUDO_USER" ]; then
     user_name=$SUDO_USER
@@ -168,7 +166,7 @@ then
 
         if [ -x "$configure_git_script" ]; then
             # Only run the child script if it is executable
-            (./configure-git.sh "$user_email" "$user_name" "$user_home") || echo "$(date) - configure-git.sh script failed" >> setuplog.txt
+            (./configure-git.sh "$user_name" "$user_home") || echo "$(date) - configure-git.sh script failed" >> setuplog.txt
         else
             echo "$(date) - Failed to set execute permissions on configure-git.sh" | tee -a setuplog.txt
             echo "$(date) - Please run configure.sh manually" | tee -a setuplog.txt
@@ -246,13 +244,43 @@ then
 
     # Verify that the repository was cloned
     if [ $? -eq 0 ]; then
-        echo "$(date) - Successfully cloned the repository." | tee -a setuplog.txt
-        cd $repository
+        readme_contents=$(cat "$repository/README.md")
+        cd $user_home
+        echo "$(date) - $readme_contents in the $project project" | tee -a setuplog.txt
     else
+        cd $user_home
         echo "$(date) - Failed to clone the repository." | tee -a setuplog.txt
     fi
 else
     echo "$(date) - Skipping repo cloning. Continuing with the script..." | tee -a setuplog.txt
+fi
+
+###########################################
+# Download the configure-poetry.sh script #
+###########################################
+read -p "Do you want to configure poetry globals? (y/n) " answer
+
+if [[ $answer =~ ^[Yy]$ ]]
+then
+    configure_poetry_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-poetry.sh"
+    configure_poetry_script="$user_home/configure-poetry.sh"
+
+    if curl -s -o "$configure_poetry_script" "$configure_poetry_script_url"; then
+        # Only try to set permissions and run the script if the download succeeded
+        chmod a+x "$configure_poetry_script"
+
+        if [ -x "$configure_poetry_script" ]; then
+            # Only run the child script if it is executable
+            (./configure-poetry.sh "$user_home") || echo "$(date) - configure-poetry.sh script failed" >> setuplog.txt
+        else
+            echo "$(date) - Failed to set execute permissions on configure-poetry.sh" | tee -a setuplog.txt
+            echo "$(date) - Please set permissions and run manually" | tee -a setuplog.txt
+        fi
+    else
+        echo "$(date) - Failed to download configure-poetry.sh" | tee -a setuplog.txt
+    fi
+else
+    echo "$(date) - Skipping poetry setup. Continuing with the script..." | tee -a setuplog.txt
 fi
 
         # code .

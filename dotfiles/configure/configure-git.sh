@@ -1,9 +1,10 @@
 #!/bin/bash
 echo "########################### configuring git ##############################" | tee -a setuplog.txt
 # Assign passed arguments to variables
-user_email="$1"
-user_name="$2"
-user_home="$3"
+echo - p "Please enter your email:" user_email
+
+user_name="$1"
+user_home="$2"
 echo "$(date) - Run as: $user_email , $user_name , $user_home" | tee -a setuplog.txt
 
 # Check if gpg is installed
