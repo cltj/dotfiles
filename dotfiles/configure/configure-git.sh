@@ -1,7 +1,8 @@
 #!/bin/bash
 echo "########################### configuring git ##############################" | tee -a setuplog.txt
 # Assign passed arguments to variables
-echo - p "Please enter your email:" user_email
+echo - p "Please enter your email:" 
+read user_email
 
 user_name="$1"
 user_home="$2"
