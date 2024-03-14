@@ -13,6 +13,18 @@ else
     user_home=$HOME
 fi
 
+# Create and set permissions for the .local/bin and .config directories
+mkdir -v -p $user_home/.local
+mkdir -v -p $user_home/.config
+mkdir -v -p $user_home/.dotfiles
+sudo chown -R $user_name:$user_name $user_home/.local
+sudo chmod -R 755 $user_home/.local
+sudo chown -R $user_name:$user_name $user_home/.config
+sudo chmod -R 755 $user_home/.config
+sudo chown -R $user_name:$user_name $user_home/.dotfiles
+sudo chmod -R 755 $user_home/.dotfiles
+
+
 echo "$(date) - Bringing image up to speed. Please wait..." | tee -a setuplog.txt
 sudo apt update -y > /dev/null 2>&1
 sudo apt upgrade -y > /dev/null 2>&1 && sudo apt autoremove -y > /dev/null 2>&1
@@ -137,10 +149,10 @@ then
             # Only run the child script if it is executable
             $configure_dotfiles_script $user_home || echo "$(date) - configure-dotfiles.sh script failed" | tee -a setuplog.txt
             # Source dotfiles.
-            test -e $user_home/.zshrc && source $user_home/.zshrc
-            test -e $user_home/.bashrc && source $user_home/.bashrc
             test -e $user_home/.config/envman/PATH.env && source $user_home/.config/envman/PATH.env
             test -e $user_home/.dotfiles/.commonrc && source $user_home/.dotfiles/.commonrc
+            test -e $user_home/.zshrc && source $user_home/.zshrc
+            test -e $user_home/.bashrc && source $user_home/.bashrc
         else
             echo "$(date) - Failed to set execute permissions on configure-dotfiles.sh" | tee -a setuplog.txt
             echo "$(date) - Please run configure-dotfiles.sh manually" | tee -a setuplog.txt

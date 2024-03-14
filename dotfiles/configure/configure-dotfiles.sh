@@ -5,11 +5,9 @@ user_home="$1"
 echo "$(date) - Run as: $user_home" | tee -a setuplog.txt
 
 # Ensure Starship is installed and up to date.
-mkdir -v -p $user_home/.local/bin
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --force --bin-dir $user_home/.local/bin
 
 # Ensure dotfiles are downloaded.
-mkdir -v -p $user_home/.dotfiles
 wget -O $user_home/.dotfiles/starship.toml "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/starship.toml"
 wget -O $user_home/.dotfiles/.commonrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.commonrc"
 wget -O $user_home/.dotfiles/.zshrc "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/.dotfiles/.zshrc"
