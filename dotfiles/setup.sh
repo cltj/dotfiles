@@ -104,7 +104,7 @@ do
                 sudo apt update
                 ;;
             "poetry")
-                curl -sSL https://install.python-poetry.org | python3 -
+                sudo -u $user_name curl -sSL https://install.python-poetry.org | python3 -
                 poetry self update
                 echo "$(date) - $command installed." | tee -a setuplog.txt
                 ;;
