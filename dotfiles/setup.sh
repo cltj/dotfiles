@@ -13,8 +13,9 @@ else
     user_home=$HOME
 fi
 
-sudo apt update -y
-sudo apt upgrade -y && sudo apt autoremove -y
+echo "$(date) - Bringing image up to speed. Please wait..." | tee -a setuplog.txt
+sudo apt update -y > /dev/null 2>&1
+sudo apt upgrade -y > /dev/null 2>&1 && sudo apt autoremove -y > /dev/null 2>&1
 
 ####################
 # Install packages #
@@ -44,7 +45,7 @@ done
 ###########################################
 # Check if installed, if not install them #
 ###########################################
-commands=("zsh" "databricks" "az" "git-credential-manager") #"poetry"
+commands=("databricks" "az" "git-credential-manager") # "zsh"  "poetry"
 for command in "${commands[@]}"
 do
     if ! command -v $command &> /dev/null
@@ -52,27 +53,27 @@ do
     ERRORS=$(sudo apt install -y $1 2>&1 >/dev/null)
         echo "Installing $command..."
         case $command in
-            "zsh")
-                # Check if oh-my-zsh is installed
-                if [ ! -d "$user_home/.oh-my-zsh" ]
-                then
-                    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-                    chsh -s /bin/zsh $user_name
-                    echo "$(date) - oh-my-zsh installed." | tee -a setuplog.txt
-                fi
-                # Check if fzf is installed
-                if ! command -v fzf &> /dev/null
-                then
-                    sudo apt install fzf -y
-                    echo "$(date) - fzf installed." | tee -a setuplog.txt
-                fi
-                # Check if zsh-autosuggestions is installed
-                if [ ! -d "$user_home/.oh-my-zsh/plugins/zsh-autosuggestions" ]
-                then
-                    sudo apt install zsh-autosuggestions -y
-                    echo "$(date) - zsh-autosuggestions installed." | tee -a setuplog.txt
-                fi
-                ;;
+            # "zsh")
+            #     # Check if oh-my-zsh is installed
+            #     if [ ! -d "$user_home/.oh-my-zsh" ]
+            #     then
+            #         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+            #         chsh -s /bin/zsh $user_name
+            #         echo "$(date) - oh-my-zsh installed." | tee -a setuplog.txt
+            #     fi
+            #     # Check if fzf is installed
+            #     if ! command -v fzf &> /dev/null
+            #     then
+            #         sudo apt install fzf -y
+            #         echo "$(date) - fzf installed." | tee -a setuplog.txt
+            #     fi
+            #     # Check if zsh-autosuggestions is installed
+            #     if [ ! -d "$user_home/.oh-my-zsh/plugins/zsh-autosuggestions" ]
+            #     then
+            #         sudo apt install zsh-autosuggestions -y
+            #         echo "$(date) - zsh-autosuggestions installed." | tee -a setuplog.txt
+            #     fi
+            #     ;;
             "databricks")
                 curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sudo sh
                 echo "$(date) - $command installed." | tee -a setuplog.txt
@@ -150,9 +151,9 @@ else
     echo "$(date) - Skipping dotfiles setup. Continuing with the script..." | tee -a setuplog.txt
 fi
 
-########################################
-# Download the configure-git.sh script #
-########################################
+#################
+# Configure git #
+#################
 read -p "Do you want to setup git? (y/n) " answer
 
 if [[ $answer =~ ^[Yy]$ ]]
@@ -218,9 +219,37 @@ else
     echo "$(date) - Skipping Databricks CLI configuration. Continuing with the script..." | tee -a setuplog.txt
 fi
 
-########################
-# Clone the repository #
-########################
+####################
+# Configure poetry #
+####################
+read -p "Do you want to configure poetry globals? (y/n) " answer
+
+if [[ $answer =~ ^[Yy]$ ]]
+then
+    configure_poetry_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-poetry.sh"
+    configure_poetry_script="$user_home/configure-poetry.sh"
+
+    if curl -s -o "$configure_poetry_script" "$configure_poetry_script_url"; then
+        # Only try to set permissions and run the script if the download succeeded
+        chmod a+x "$configure_poetry_script"
+
+        if [ -x "$configure_poetry_script" ]; then
+            # Only run the child script if it is executable
+            (./configure-poetry.sh "$user_home") || echo "$(date) - configure-poetry.sh script failed" >> setuplog.txt
+        else
+            echo "$(date) - Failed to set execute permissions on configure-poetry.sh" | tee -a setuplog.txt
+            echo "$(date) - Please set permissions and run manually" | tee -a setuplog.txt
+        fi
+    else
+        echo "$(date) - Failed to download configure-poetry.sh" | tee -a setuplog.txt
+    fi
+else
+    echo "$(date) - Skipping poetry setup. Continuing with the script..." | tee -a setuplog.txt
+fi
+
+######################
+# Clone a repository #
+######################
 read -p "Do you want to clone repo? (y/n) " answer
 
 if [[ $answer =~ ^[Yy]$ ]]
@@ -255,44 +284,6 @@ else
     echo "$(date) - Skipping repo cloning. Continuing with the script..." | tee -a setuplog.txt
 fi
 
-###########################################
-# Download the configure-poetry.sh script #
-###########################################
-read -p "Do you want to configure poetry globals? (y/n) " answer
 
-if [[ $answer =~ ^[Yy]$ ]]
-then
-    configure_poetry_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-poetry.sh"
-    configure_poetry_script="$user_home/configure-poetry.sh"
-
-    if curl -s -o "$configure_poetry_script" "$configure_poetry_script_url"; then
-        # Only try to set permissions and run the script if the download succeeded
-        chmod a+x "$configure_poetry_script"
-
-        if [ -x "$configure_poetry_script" ]; then
-            # Only run the child script if it is executable
-            (./configure-poetry.sh "$user_home") || echo "$(date) - configure-poetry.sh script failed" >> setuplog.txt
-        else
-            echo "$(date) - Failed to set execute permissions on configure-poetry.sh" | tee -a setuplog.txt
-            echo "$(date) - Please set permissions and run manually" | tee -a setuplog.txt
-        fi
-    else
-        echo "$(date) - Failed to download configure-poetry.sh" | tee -a setuplog.txt
-    fi
-else
-    echo "$(date) - Skipping poetry setup. Continuing with the script..." | tee -a setuplog.txt
-fi
-
-        # code .
-        # # Check if Visual Studio Code is running
-        # if pgrep -x "code" > /dev/null
-        # then
-        #     echo "Visual Studio Code is running." | tee -a setuplog.txt
-        #     ./configure-vscode-extentions.sh || echo "Failed to run configure-vscode-extentions.sh" | tee -a setuplog.txt
-        #     ./configure-poetry.sh $repository $user_home || echo "Failed to run configure-poetry.sh" | tee -a setuplog.txt
-        #     source $user_home/.bashrc
-        # else
-        #     echo "$(date) - Visual Studio Code failed to start." | tee -a setuplog.txt
-        # fi
 
 echo "#####################  setup.sh done! #######################" >> setuplog.txt
