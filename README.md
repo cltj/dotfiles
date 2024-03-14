@@ -40,7 +40,6 @@ updot
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-Check that you are on version 2.x
 ```shell
 poetry self update
 ```
