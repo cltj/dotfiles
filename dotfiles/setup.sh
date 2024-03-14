@@ -102,14 +102,11 @@ do
                 wget "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.4.1/gcm-linux_amd64.2.4.1.deb" -O /tmp/gcmcore.deb && sudo dpkg -i /tmp/gcmcore.deb
                 sudo apt update
                 ;;
-            # "poetry")
-                #curl -sSL https://install.python-poetry.org | python3 -
-                # mkdir -v -p $user_home/.poetry/bin
-                # sudo POETRY_HOME="$user_home/.poetry/bin" python3 - < <(curl -sSL https://install.python-poetry.org)
-                # export PATH="$user_home/.poetry/bin:$PATH"
-                # source $user_home/.bashrc
-                # echo "$(date) - $command installed." | tee -a setuplog.txt
-                # ;;
+            "poetry")
+                curl -sSL https://install.python-poetry.org | python3 -
+                poetry self update
+                echo "$(date) - $command Installed" | tee -a setuplog.txt
+                ;;
         esac
     else
         echo "$(date) - $command is already installed." | tee -a setuplog.txt
