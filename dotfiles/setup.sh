@@ -15,6 +15,7 @@ fi
 
 # Create and set permissions for the .local/bin and .config directories
 mkdir -v -p $user_home/.local
+mkdir -v -p $user_home/.local/bin
 mkdir -v -p $user_home/.config
 mkdir -v -p $user_home/.dotfiles
 sudo chown -R $user_name:$user_name $user_home/.local
