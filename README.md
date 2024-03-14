@@ -44,8 +44,11 @@ Open vs code by using `code .` command, close the application again and verify t
 ```
 
 ## Install poetry
-Poetry should already be installed by the setup script. You can check by typing in
+```shell
+curl -sSL https://install.python-poetry.org | python3 -
+```
 
+Check that you are on version 2.x
 ```shell
 poetry --version
 ```
@@ -81,21 +84,3 @@ Configure databricks connect
 
   Once configured you can run the file test_databricks.py to verify that it works as expected.
   It will give you the 5 first rows of new york taxt sample data.
-
-
-## Local git setup
-
-Navigate to project and set local git configurations (run `git remote -v` to get the path)
-```Shell
-git config credential.useHttpPath true
-git remote set-url origin https://<domain>@dev.azure.com/<project>/<path>
-```
-
-```Shell
-git remote -v
-```
-
-```Shell
-git remote set-url origin https://<domain>@dev.azure.com/<project>/<path>
-```
-

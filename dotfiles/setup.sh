@@ -91,12 +91,13 @@ do
                 sudo apt update
                 ;;
             # "poetry")
-            #     mkdir -v -p $user_home/.poetry/bin
-            #     sudo POETRY_HOME="$user_home/.poetry/bin" python3 - < <(curl -sSL https://install.python-poetry.org)
-            #     export PATH="$user_home/.poetry/bin:$PATH"
-            #     source $user_home/.bashrc
-            #     echo "$(date) - $command installed." | tee -a setuplog.txt
-            #     ;;
+                #curl -sSL https://install.python-poetry.org | python3 -
+                # mkdir -v -p $user_home/.poetry/bin
+                # sudo POETRY_HOME="$user_home/.poetry/bin" python3 - < <(curl -sSL https://install.python-poetry.org)
+                # export PATH="$user_home/.poetry/bin:$PATH"
+                # source $user_home/.bashrc
+                # echo "$(date) - $command installed." | tee -a setuplog.txt
+                # ;;
         esac
     else
         echo "$(date) - $command is already installed." | tee -a setuplog.txt
@@ -222,30 +223,30 @@ fi
 ####################
 # Configure poetry #
 ####################
-read -p "Do you want to configure poetry globals? (y/n) " answer
+# read -p "Do you want to configure poetry globals? (y/n) " answer
 
-if [[ $answer =~ ^[Yy]$ ]]
-then
-    configure_poetry_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-poetry.sh"
-    configure_poetry_script="$user_home/configure-poetry.sh"
+# if [[ $answer =~ ^[Yy]$ ]]
+# then
+#     configure_poetry_script_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-poetry.sh"
+#     configure_poetry_script="$user_home/configure-poetry.sh"
 
-    if curl -s -o "$configure_poetry_script" "$configure_poetry_script_url"; then
-        # Only try to set permissions and run the script if the download succeeded
-        chmod a+x "$configure_poetry_script"
+#     if curl -s -o "$configure_poetry_script" "$configure_poetry_script_url"; then
+#         # Only try to set permissions and run the script if the download succeeded
+#         chmod a+x "$configure_poetry_script"
 
-        if [ -x "$configure_poetry_script" ]; then
-            # Only run the child script if it is executable
-            (./configure-poetry.sh "$user_home") || echo "$(date) - configure-poetry.sh script failed" >> setuplog.txt
-        else
-            echo "$(date) - Failed to set execute permissions on configure-poetry.sh" | tee -a setuplog.txt
-            echo "$(date) - Please set permissions and run manually" | tee -a setuplog.txt
-        fi
-    else
-        echo "$(date) - Failed to download configure-poetry.sh" | tee -a setuplog.txt
-    fi
-else
-    echo "$(date) - Skipping poetry setup. Continuing with the script..." | tee -a setuplog.txt
-fi
+#         if [ -x "$configure_poetry_script" ]; then
+#             # Only run the child script if it is executable
+#             (./configure-poetry.sh "$user_home") || echo "$(date) - configure-poetry.sh script failed" >> setuplog.txt
+#         else
+#             echo "$(date) - Failed to set execute permissions on configure-poetry.sh" | tee -a setuplog.txt
+#             echo "$(date) - Please set permissions and run manually" | tee -a setuplog.txt
+#         fi
+#     else
+#         echo "$(date) - Failed to download configure-poetry.sh" | tee -a setuplog.txt
+#     fi
+# else
+#     echo "$(date) - Skipping poetry setup. Continuing with the script..." | tee -a setuplog.txt
+# fi
 
 ######################
 # Clone a repository #
