@@ -1,6 +1,13 @@
 #!/bin/bash
 echo "################ configuring poetry ################" | tee -a setuplog.txt
 
+# Check if Poetry is installed
+if ! command -v poetry &> /dev/null
+then
+    echo "Poetry could not be found. Please install Poetry and try again."
+    return 1
+fi
+
 #repository="$1"  # Get the first argument passed to the script
 user_home="$1"  # Get the second argument passed to the script
 
@@ -11,7 +18,7 @@ if [ -d "$user_home/.cache/pypoetry" ] && [ -d "$user_home/.config/pypoetry" ]; 
     echo "$(date) - .cache/pypoetry and .config/pypoetry were created successfully." | tee -a setuplog.txt
 else
     echo "$(date) -Failed to create directories." | tee -a setuplog.txt
-    exit 1
+    return 1
 fi
 
 # Set permissions for the .cache/pypoetry and .config/pypoetry directories and check if they were set successfully
@@ -25,7 +32,7 @@ if [[ $permissions_cache == drwxrwxrwx ]] && [[ $permissions_config == drwxrwxrw
     echo "$(date) - Permissions were set successfully." | tee -a setuplog.txt
 else
     echo "$(date) - Failed to set permissions." | tee -a setuplog.txt
-    exit 1
+    return 1
 fi
 
 
