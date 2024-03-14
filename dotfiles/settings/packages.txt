@@ -14,4 +14,3 @@ lsb-release
 fontconfig
 python3-poetry
 npm
-zoxide
