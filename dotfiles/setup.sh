@@ -106,7 +106,7 @@ do
             "poetry")
                 curl -sSL https://install.python-poetry.org | python3 -
                 poetry self update
-                echo "$(date) - $command Installed" | tee -a setuplog.txt
+                echo "$(date) - $command installed." | tee -a setuplog.txt
                 ;;
         esac
     else
@@ -120,14 +120,14 @@ chmod a+w setuplog.txt
 ###############################################
 # Download the configure-vscode-ext.sh script #
 ###############################################
-configure_vscode_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-ext.sh"
-configure_vscode_script="$user_home/configure-vscode-ext.sh"
-if curl -s -o "$configure_vscode_script" "$configure_vscode_url"; then
-    # Only try to set permissions and run the script if the download succeeded
-    chmod a+x "$configure_vscode_script"
-else
-    echo "$(date) - Failed to download configure-vscode-ext.sh" | tee -a setuplog.txt
-fi
+# configure_vscode_url="https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/configure/configure-vscode-ext.sh"
+# configure_vscode_script="$user_home/configure-vscode-ext.sh"
+# if curl -s -o "$configure_vscode_script" "$configure_vscode_url"; then
+#     # Only try to set permissions and run the script if the download succeeded
+#     chmod a+x "$configure_vscode_script"
+# else
+#     echo "$(date) - Failed to download configure-vscode-ext.sh" | tee -a setuplog.txt
+# fi
 
 #############################################
 # Download the configure-dotfiles.sh script #
@@ -284,7 +284,7 @@ then
 
     # Verify that the repository was cloned
     if [ $? -eq 0 ]; then
-        sudo -u $user_name mkdir -p "$repository/.vscode"
+        sudo -u $user_name mkdir -p "/mnt/c/dev/$repository/.vscode"
         wget "https://raw.githubusercontent.com/cltj/dotfiles/master/dotfiles/settings/extensions.json" -O "$repository/.vscode/extensions.json"
 
         readme_contents=$(cat "$repository/README.md")
