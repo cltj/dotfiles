@@ -40,7 +40,7 @@ credential_manager_path=$(which git-credential-manager)
 # Set Git global configurations
 git config --file "$user_home/.gitconfig" user.email "$user_email"
 git config --file "$user_home/.gitconfig" user.name "$user_name"
-git config --file "$user_home/.gitconfig" credential.helper "$credential_manager_path"
+git config --file "$user_home/.gitconfig" credential.helper "manager-core"
 
 # Verify that the Git global configurations were set
 if [ -f "$user_home/.gitconfig" ]; then
