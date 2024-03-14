@@ -3,16 +3,14 @@
 
 . ~/.dotfiles/.commonrc
 
-export PATH="/home/tj/.local/bin/poetry:$PATH"
-#export PATH="/home/tj/.cache/pypoetry/virtualenvs/fka-databricks-GAMMsPWM-py3.10/bin/python:$PATH"
-#export PYTHONPATH="/home/tj/.cache/pypoetry/virtualenvs/fka-databricks-GAMMsPWM-py3.10/lib/python3.10/site-packages:$PYTHONPATH"
-export PATH="$HOME/.local/bin:$PATH"
-export HISTSIZE=1000
-export SAVEHIST=2000
+export PATH="~/.local/bin/poetry:$PATH"
+export PATH="~/.local/bin:$PATH"
 export GPG_TTY=$(tty)
 export GCM_CREDENTIAL_STORE="gpg"
 export GCM_PROVIDER="azure-repos"
-export GCM_AZREPOS_CREDENTIALTYPE="oauth"
+export GCM_AZREPOS_CREDENTIALTYPE="pat"
+export HISTSIZE=1000
+export HISTFILESIZE=2000
 
 bindkey "^[[A" history-beginning-search-backward
 bindkey "^[[B" history-beginning-search-forward
