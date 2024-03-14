@@ -50,12 +50,6 @@ Poetry should already be installed by the setup script. You can check by typing 
 poetry --version
 ```
 
-Otherwise you have to get it from here
-```shell
-curl -sSL https://install.python-poetry.org | python3 -
-```
-
-
 Navigate to the project folder, if you havent cloned the repo before you need to do this first
 
 ```shell
