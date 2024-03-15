@@ -1,4 +1,0 @@
-[credential]
-    credentialStore = gpg
-    helper = manager-core
-    useHttpPath = true

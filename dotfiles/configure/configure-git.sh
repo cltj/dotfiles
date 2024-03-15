@@ -5,6 +5,9 @@ echo -p "Please enter your email:" user_email
 
 user_name="$1"
 user_home="$2"
+
+read -p "Please enter your email: " user_email
+
 echo "$(date) - Run as: $user_email , $user_name , $user_home" | tee -a setuplog.txt
 
 # Check if gpg is installed
@@ -24,26 +27,19 @@ if ! command -v git-credential-manager &> /dev/null; then
     return 1
 fi
 
-# # Prompt the user for their Azure DevOps PAT and read it into a variable
-# read -sp "Enter your Azure DevOps PAT: " azure_pat
-# echo
-# # Replace each character of the PAT with a * and store the result in a variable
-# masked_pat=$(echo "$azure_pat" | sed 's/./*/g')
-# # Display the masked PAT
-# echo "$masked_pat"
-# read -p "Enter your your organization: " organization
 
 
 echo "$(date) - Setting up git" | tee -a setuplog.txt
 # Attempt to find the path to git-credential-manager
 credential_manager_path=$(which git-credential-manager)
 # Set Git global configurations
-git config --file "$user_home/.dotfiles/.gitconfig" user.email "$user_email"
-git config --file "$user_home/.dotfiles/.gitconfig" user.name "$user_name"
+git config --file "$user_home/.gitconfig" credential.useHttpPath true
+git config --file "$user_home/.gitconfig" credential.helper "manager-core"
+git config --file "$user_home/.gitconfig" credential.credentialStore "gpg"
+git config --file "$user_home/.gitconfig" user.email "$user_email"
+git config --file "$user_home/.gitconfig" user.name "$user_name"
 
-rm -v -f $user_home/.gitconfig
-ln -v -s $user_home/.dotfiles/.gitconfig $user_home/.gitconfig && echo "$(date) - Created symlink for .gitconfig" >> setuplog.txt || echo "$(date) - Failed to create symlink for .gitconfig" | tee -a setuplog.txt
-   
+
 
 # Verify that the Git global configurations were set
 if [ -f "$user_home/.gitconfig" ]; then
@@ -69,6 +65,14 @@ else
     echo "Failed to create GPG key." | tee -a setuplog.txt
 fi
 
+# # Prompt the user for their Azure DevOps PAT and read it into a variable
+# read -sp "Enter your Azure DevOps PAT: " azure_pat
+# echo
+# # Replace each character of the PAT with a * and store the result in a variable
+# masked_pat=$(echo "$azure_pat" | sed 's/./*/g')
+# # Display the masked PAT
+# echo "$masked_pat"
+# read -p "Enter your your organization: " organization
 
 # # Prompt the user for their Azure DevOps PAT and read it into a variable
 # read -sp "Enter your Azure DevOps PAT: " azure_pat
