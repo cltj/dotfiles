@@ -26,7 +26,7 @@ sudo chown -R $user_name:$user_name $user_home/.dotfiles
 sudo chmod -R 755 $user_home/.dotfiles
 
 
-echo "$(date) - Bringing image up to speed. Please wait..." | tee -a setuplog.txt
+echo "$(date) - Bringing image up to speed. This will take a while..." | tee -a setuplog.txt
 sudo apt update -y > /dev/null 2>&1
 sudo apt upgrade -y > /dev/null 2>&1 && sudo apt autoremove -y > /dev/null 2>&1
 
@@ -193,7 +193,6 @@ else
     echo "$(date) - Skipping Databricks CLI configuration. Continuing with the script..." | tee -a setuplog.txt
 fi
 
-
 ######################
 # Clone a repository #
 ######################
@@ -233,7 +232,5 @@ then
 else
     echo "$(date) - Skipping repo cloning. Continuing with the script..." | tee -a setuplog.txt
 fi
-
-
 
 echo "#####################  setup.sh done! #######################" >> setuplog.txt

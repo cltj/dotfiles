@@ -1,4 +1,4 @@
 [credential]
     credentialStore = gpg
-    helper = /usr/local/bin/git-credential-manager
+    helper = manager-core
     useHttpPath = true
