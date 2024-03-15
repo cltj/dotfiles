@@ -210,13 +210,13 @@ then
     read repository
 
     # Define the Azure DevOps repository URL
-    repo_url="https://dev.azure.com/${organization}/${project}/_git/${repository}"
+    repo_url="https://${organization}.visualstudio.com/${project}/_git/${repository}"
 
     # Change to the /mnt/c/dev directory
     cd /mnt/c/dev
 
     # Clone the repository
-    git -u $user_name clone $repo_url
+    git clone $repo_url
 
     # Verify that the repository was cloned
     if [ $? -eq 0 ]; then
