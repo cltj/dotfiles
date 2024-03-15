@@ -164,6 +164,7 @@ then
     # Perform an interactive login
     if az login; then
         echo "$(date) - Successfully logged in to Azure." | tee -a setuplog.txt
+        # az config set extension.use_dynamic_install=yes_without_prompt # For running az extension
     else
         echo "$(date) - Failed to log in to Azure. Continuing with the script..." | tee -a setuplog.txt
     fi
