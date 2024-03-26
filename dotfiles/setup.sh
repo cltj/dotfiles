@@ -12,18 +12,21 @@ if [ -n "$SUDO_USER" ]; then
 else
     user_home=$HOME
 fi
-
+1
 # Create and set permissions for the .local/bin and .config directories
 mkdir -v -p $user_home/.local
 mkdir -v -p $user_home/.local/bin
 mkdir -v -p $user_home/.config
 mkdir -v -p $user_home/.dotfiles
+mkdir -v -p $user_home/projects
 sudo chown -R $user_name:$user_name $user_home/.local
 sudo chmod -R 755 $user_home/.local
 sudo chown -R $user_name:$user_name $user_home/.config
 sudo chmod -R 755 $user_home/.config
 sudo chown -R $user_name:$user_name $user_home/.dotfiles
 sudo chmod -R 755 $user_home/.dotfiles
+sudo chown -R $user_name:$user_name $user_home/projects
+sudo chmod -R 755 $user_home/projects
 
 
 echo "$(date) - Bringing image up to speed. This will take a while..." | tee -a setuplog.txt
