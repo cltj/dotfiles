@@ -32,7 +32,7 @@ echo "$(date) - Setting up git" | tee -a setuplog.txt
 credential_manager_path=$(which git-credential-manager)
 # Set Git global configurations
 git config --file "$user_home/.gitconfig" credential.useHttpPath true
-git config --file "$user_home/.gitconfig" credential.helper "manager-core"
+git config --file "$user_home/.gitconfig" credential.helper "manager"
 git config --file "$user_home/.gitconfig" credential.credentialStore "gpg"
 git config --file "$user_home/.gitconfig" user.email "$user_email"
 git config --file "$user_home/.gitconfig" user.name "$user_name"
