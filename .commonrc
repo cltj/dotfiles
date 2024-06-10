@@ -1,0 +1,321 @@
+export PATH=~/.local/bin:~/.poetry/bin:$PATH
+export MCFLY_RESULTS=50
+export MCFLY_FUZZY=true
+
+# Meta
+alias updot="source <(curl -fsSL https://raw.githubusercontent.com/fktj/dotfiles/main/install.sh)"
+
+# cd
+alias cd..='cd ..'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .2='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+
+j() {
+    # Jump straight to specified project directory and optional worktree subdirectory.
+    if [ -z "$2" ]
+    then
+        cd ~/projects/"$1"
+    else
+        cd ~/projects/"$1"/"$2"
+    fi
+}
+
+j_complete() {
+    # Tab completion for the j function.
+    # TODO: Make this work for Zsh as well as Bash.
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    local prev=${COMP_WORDS[COMP_CWORD-1]}
+    
+    if [[ $COMP_CWORD -eq 1 ]] ; then
+        COMPREPLY=( $(compgen -W "$(ls ~/projects/)" -- $cur) )
+    elif [[ $COMP_CWORD -eq 2 ]] ; then
+        local IFS=$'\n'
+        local worktrees=( $(cd ~/projects/"$prev" && git worktree list | awk 'NR>1{print $1}' | sed -e "s|^${HOME}/projects/${prev}/||") )
+        COMPREPLY=( $(compgen -W "${worktrees[*]}" -- $cur) )
+    fi
+}
+complete -F j_complete j
+
+jw() {
+    # Jump to specified worktree subdirectory in the current git repo.
+    # (The function doesn't do much, the accompanying completion is where the magic happens.)
+    is_bare=$(git rev-parse --is-bare-repository)
+
+    if [ "$is_bare" == "true" ]; then
+        cd "./$1"
+    else
+        cd "../$1"
+  fi
+}
+
+ jw_complete() {
+    # Tab completion for the jw function.
+    # TODO: Make this work for Zsh as well as Bash.
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    local worktrees=( $(git worktree list | grep -v '(bare)' | awk -F'/' '{print $NF}' | awk '{print $1}') )
+    COMPREPLY=( $(compgen -W "${worktrees[*]}" -- $cur) )
+}
+complete -F jw_complete jw
+
+# git
+alias ga="git add"
+__git_complete ga _git_add
+alias gd="git diff"
+__git_complete gd _git_diff
+alias gds="git diff --staged"
+alias gb="git branch"
+__git_complete gb _git_branch
+alias gba="git branch -a"
+alias gch="git checkout"
+__git_complete gch _git_checkout
+alias gs="git status"
+__git_complete gs _git_status
+alias gc="git commit"
+__git_complete gc _git_commit
+alias gl="git log"
+__git_complete gl _git_log
+alias glo="git log --oneline --graph"
+alias gps="git push"
+__git_complete gps _git_push
+alias gpl="git pull"
+__git_complete gpl _git_pull
+alias gr="git reset"
+__git_complete gr _git_reset
+alias grh="git reset --hard"
+__git_complete grh _git_reset
+alias gf="git fetch"
+__git_complete gf _git_fetch
+alias gsu="git submodule init && git submodule update"
+alias gamend="git commit --amend --no-edit"
+alias gforce="git push --force-with-lease"
+alias grm="git ls-files -c --ignored --exclude-standard -z | xargs -0 git rm --cached"  # Forget ignored
+alias gw="git worktree"
+__git_complete gw _git_worktree
+alias gwl="git worktree list"
+alias gcar="git config --add remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
+
+get_worktree_root() {
+    # Get the worktree root directory
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        echo "You are not in a Git repository" >&2 ; return 1
+    fi
+
+    if [ "$(git rev-parse --is-bare-repository)" = "true" ]; then
+        pwd
+        return 0
+    fi
+
+    worktree_git_dir="$(git rev-parse --git-dir)"
+    if [ ! -f "$worktree_git_dir/commondir" ]; then
+        echo "Regular git project, not a bare repo" >&2 ; return 1
+    fi
+
+    bare_root_relative_path="$(cat "$worktree_git_dir/commondir")"
+    bare_root_path="$worktree_git_dir/$bare_root_relative_path"
+    realpath -m "$bare_root_path"
+    return 0
+}
+
+gwa() {
+    # Add worktree
+    worktree_root="$(get_worktree_root)"
+    ret_val=$?
+    if [ $ret_val -ne 1 ]; then
+        cd "$worktree_root" && git worktree add "$1" && cd "$1"
+    fi
+}
+__git_complete gwa _git_checkout  # Hack to get branches from tab completion
+
+gwr() {
+    # Force remove a worktree
+    git worktree remove $1 --force
+}
+__git_complete gwr _git_checkout  # Hack to get branches from tab completion
+
+gri() {
+    # Interactive rebase. Specify how many commits to include.
+    git rebase -i --autosquash HEAD~$*
+}
+
+gclb() {
+    # Clone repo as bare, CD into it, and configure stuffs.
+    cd ~/projects && output=$(git clone --bare $* 2>&1) && directory_name=$(echo "$output" | grep -oE "repository '([^']*)'" | sed -E "s/repository '([^']*)'/\1/") && cd "$directory_name" && git config --add remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*' && echo "$output"
+}
+
+gsquish() {
+    # Create fixup for the provided commit, and immediately autosquash
+    COMMIT_HASH=$1
+    git commit --fixup=$COMMIT_HASH
+    GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash $COMMIT_HASH~1
+}
+
+gsr() {
+    # Set remote to trach current branch.
+    if [ $(git remote | wc -l) -ne 1 ]; then
+        return
+    fi
+    branch=$(git branch --show-current)
+    remote=$(git remote)
+    git branch --set-upstream-to=$remote/$branch $branch
+}
+
+gfu () {
+    # Force update local branch to specified ref or remote branch with the same name
+    target_ref="$1"
+    branch=$(git branch --show-current);
+    
+    if [ -z "$target_ref" ]; then
+            if [ "$(git remote | wc -l)" -ne 1 ]; then
+                echo "Error: Unexpected number of remotes detected."
+                return 1;
+            fi;
+        remote=$(git remote);
+        target_ref="$remote/$branch"
+    fi
+
+    git checkout HEAD^  # Because we can't force update active branch
+    git branch --force "$branch" "$target_ref"
+    git checkout "$branch"
+}
+
+# rtx
+slpy() {
+    # Set local Python version. Usage: slpy 3.11
+    rtx install python@$* ; rtx local python@$*
+}
+
+# poetry
+alias poetry-rebuild='poetry env remove --all && poetry install'
+alias pru="poetry run"
+alias psh="poetry shell"
+alias pad="poetry add"
+alias pin="poetry install"
+alias plo="poetry lock"
+alias plof="trash poetry.lock && poetry lock"
+alias plofi="trash poetry.lock && poetry install"
+alias pen="poetry env"
+alias peni="poetry env info"
+alias penl="poetry env list"
+alias penu="poetry env use python"
+alias penr="poetry env remove --all"
+alias penru="poetry env remove --all && poetry env use python"
+alias penrui="poetry env remove --all && poetry env use python && poetry install"
+
+# OpenShift
+alias ocga="oc get apps"
+alias ocgc="oc get crjonjobs"
+alias ocda="oc delete app"
+alias ocdc="oc delete cronjob"
+alias ocgp="oc get projects"
+alias ocp="oc project"
+
+# docker [compose]
+alias dc="docker compose"
+alias up="docker compose up"
+alias down="docker compose down"
+
+# other
+alias init="git init && pre-commit install && poetry install"
+alias pre="pre-commit install && pre-commit run --all-files"
+alias re-source='. ~/.zshrc 2>/dev/null ; . ~/.bashrc 2>/dev/null'
+alias p='sb pycharm nosplash .'
+alias lk="exa -lhar -s modified"
+alias c="clear"
+alias grep="grep --color=auto"
+alias t="poetry run pytest"
+alias ts="pytest --log-cli-level=100 -p no:warnings"
+alias listfunc="compgen -A function | grep \"^[^_]\""
+alias now='date +"%s"'
+alias dev="cd /mnt/c/dev"
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+
+
+mcd() {
+    # Create directory and cd into it
+    mkdir "$*" && cd "$*"
+}
+
+
+expsec () {
+    # Export secret. Looks up argument in pass, and exports value
+    if [ ! -v $1 ]; then
+        export "$1"="$(pass show "$1")"
+    fi
+}
+
+
+crush() {
+    # Kill process listening on specified port (default = 8000)
+    port=$*
+    if [ -z "$port" ]; then
+        port=8000
+    fi
+    kill $(lsof -i tcp:$port | awk 'NR==2 {print $2}')
+}
+
+
+trash() {
+    # Move file or folder to ~/.trash. If already present, append .~<i>~
+    [ ! -d ~/.trash ] && mkdir ~/.trash
+    mv $* ~/.trash --backup=numbered
+}
+
+
+sb() {
+    # Starts a process in the background, suppressing any stdout / stderr output.
+    $* >/dev/null 2>&1 &
+}
+
+
+url_keyword_monitor() {
+    # Scan urls for keywords, alert if number of matches has changed. Create files in ~/.urlmon
+    # Format:
+    # url
+    # keyword
+    # initial number of matches (you can just put 0)
+    if [ ! -d ~/.urlmon ]; then return 0; fi
+    files_count=$(ls -1q ~/.urlmon | wc -l)
+    if [ $files_count -eq 0 ]; then return 0; fi
+    for file in ~/.urlmon/*; do
+        url=$(head -n 1 $file)
+        keyword=$(head -n 2 $file | tail -n 1)
+        prev=$(head -n 3 $file | tail -n 1)
+        count=$(curl -s $url | grep -o $keyword | wc -l)
+        if [ $count -ne $prev ]; then
+            echo "3 The keyword count for $url has changed from $prev to $count." >>$file
+        fi
+        sed -i "3s/$prev/$count/g" $file
+    done
+    for file in ~/.urlmon/*; do
+        total_lines=$(wc -l $file | awk '{print $1}')
+        if [ $total_lines -gt 3 ]; then
+            for i in $(seq 4 $total_lines); do
+                line=$(head -n $i $file | tail -n 1)
+                old_count=$(echo $line | cut -d ' ' -f1)
+                message=$(echo $line | cut -d ' ' -f2-)
+                if [ "$old_count" -gt 0 ]; then
+                    echo -e "\033[0;31m$message\033[0m"
+                    new_count=$((old_count - 1))
+                    sed -i "${i}s/$old_count/$new_count/g" $file
+                else
+                    sed -i "${i}d" $file
+                fi
+            done
+        fi
+    done
+}
+url_keyword_monitor
+
+
+# Source local rc. Should remain at the bottom.
+if [ -f ~/.localrc ]; then
+    . ~/.localrc
+fi

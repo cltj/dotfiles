@@ -1,0 +1,8 @@
+[user]
+	email = tj@cloudlink.ai
+	name = cltj
+
+[core]
+	editor = nvim
+[color]
+	ui = true
