@@ -4,7 +4,7 @@
 
 Reset to default linux packages (ubuntu24.04)
 ```
-curl -O https://raw.githubusercontent.com/cltj/dotfiles/main/reset-to-default-packages.sh && chmod +x reset-to-default-packages.sh && ./reset-to-default-packages.sh
+wget -O https://raw.githubusercontent.com/cltj/dotfiles/main/reset-to-default-packages.sh && chmod +x reset-to-default-packages.sh && ./reset-to-default-packages.sh
 ```
 
 Run the installer
