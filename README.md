@@ -9,7 +9,7 @@ curl -O https://raw.githubusercontent.com/cltj/dotfiles/main/reset-to-default-pa
 
 Run the installer
 ```
-curl -O https://raw.githubusercontent.com/cltj/dotfiles/main/install.sh && chmod +x install.sh && ./install.sh 
+wget -O https://raw.githubusercontent.com/cltj/dotfiles/main/install.sh && chmod +x install.sh && ./install.sh 
 ```
 
 ⚠️  Warning, this will irrevocably replace your config with mine, and install a bunch of stuff on your system.
