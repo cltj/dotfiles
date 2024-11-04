@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Ensure the script is run from the root of the dotfiles repo
 cd "$(dirname "$0")"
@@ -74,6 +74,7 @@ stow --target=$HOME/.config starship
 stow --target=$HOME/.config programs
 stow --target=$HOME/.config git
 stow --target=$HOME/.config zellij
+stow --target=$HOME/.config zsh
 
 # Ensure Zsh is the default shell
 if [ "$SHELL" != "/bin/zsh" ]; then

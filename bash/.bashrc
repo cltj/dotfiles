@@ -21,6 +21,14 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 
+# Start the SSH agent if it's not already running, and add the SSH key
+#if [ -z "$SSH_AUTH_SOCK" ]; then
+#    eval "$(ssh-agent -s)"
+#    ssh-add ~/.ssh/id_ed25519
+#fi
+
+
+
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 

@@ -1,4 +1,4 @@
-# Zsh functions
+#complete -F j_complete j Zsh functions
 
 
 j() {
@@ -22,7 +22,13 @@ j_complete() {
         COMPREPLY=( $(compgen -W "${worktrees[*]}" -- $cur) )
     fi
 }
-complete -F j_complete j
+# complete -F j_complete j
+
+if type compdef > /dev/null 2>&1; then
+  compdef j_complete j
+else
+  echo "compdef command not found"
+fi
 
 jw() {
     is_bare=$(git rev-parse --is-bare-repository)
@@ -39,7 +45,15 @@ jw_complete() {
     local worktrees=( $(git worktree list | grep -v '(bare)' | awk -F'/' '{print $NF}' | awk '{print $1}') )
     COMPREPLY=( $(compgen -W "${worktrees[*]}" -- $cur) )
 }
-complete -F jw_complete jw
+# complete -F jw_complete jw
+
+
+if type compdef > /dev/null 2>&1; then
+  compdef jw_complete jw
+else
+  echo "compdef command not found"
+fi
+
 
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
