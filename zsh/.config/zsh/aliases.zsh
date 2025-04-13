@@ -11,23 +11,6 @@ alias .3='cd ../../..'
 alias .4='cd ../../../..'
 
 
-# Poetry
-alias poetry-rebuild='poetry env remove --all && poetry install'
-alias pru="poetry run"
-alias psh="poetry shell"
-alias pad="poetry add"
-alias pin="poetry install"
-alias plo="poetry lock"
-alias plof="trash poetry.lock && poetry lock"
-alias plofi="trash poetry.lock && poetry install"
-alias pen="poetry env"
-alias peni="poetry env info"
-alias penl="poetry env list"
-alias penu="poetry env use python"
-alias penr="poetry env remove --all"
-alias penru="poetry env remove --all && poetry env use python"
-alias penrui="poetry env remove --all && poetry env use python && poetry install"
-
 
 # git aliases
 alias ga="git add"
@@ -61,7 +44,6 @@ alias l='ls -CF'
 alias now='date +"%s"'
 alias grep="grep --color=auto"
 alias re-source='. ~/.zshrc 2>/dev/null ; . ~/.bashrc 2>/dev/null'
-alias t="poetry run pytest"
 alias ts="pytest --log-cli-level=100 -p no:warnings"
 alias py="python3"
 alias zellij="./zellij"
