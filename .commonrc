@@ -1,4 +1,3 @@
-export PATH=~/.local/bin:~/.poetry/bin:$PATH
 export MCFLY_RESULTS=50
 export MCFLY_FUZZY=true
 
@@ -188,22 +187,6 @@ slpy() {
     rtx install python@$* ; rtx local python@$*
 }
 
-# poetry
-alias poetry-rebuild='poetry env remove --all && poetry install'
-alias pru="poetry run"
-alias psh="poetry shell"
-alias pad="poetry add"
-alias pin="poetry install"
-alias plo="poetry lock"
-alias plof="trash poetry.lock && poetry lock"
-alias plofi="trash poetry.lock && poetry install"
-alias pen="poetry env"
-alias peni="poetry env info"
-alias penl="poetry env list"
-alias penu="poetry env use python"
-alias penr="poetry env remove --all"
-alias penru="poetry env remove --all && poetry env use python"
-alias penrui="poetry env remove --all && poetry env use python && poetry install"
 
 # OpenShift
 alias ocga="oc get apps"
